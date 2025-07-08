@@ -1,1 +1,46 @@
+@font-face{
+  font-family: Jim Nightshade;
+  src: url(../public/JimNightshade-Regular.ttf);
+}
+
 @import "tailwindcss";
+
+/* :root {
+  background-color: #A0CCDA;
+  font-family: Jim Nightshade;
+} */
+
+@theme {
+  --color-matcha: #91FF9F;
+  --color-jade: #1F9645;
+  --color-blue-gray: #A0CCDA;
+  --color-chinese-violet: #6D5A72;
+  --color-ultra-violet: #474973;
+
+  --font-jim-nightshade: Jim Nightshade, "sans-serif";
+}
+
+body {
+  @apply bg-blue-200 font-jim-nightshade;
+}
+
+/* TODO: Incorporate a theme switcher */
+/* .dark body {
+  @apply bg-black text-blue-200;
+} */
+
+@layer components {
+  .heading{
+    @apply text-2xl font-semibold;
+  }
+  .page-heading {
+    @apply text-3xl font-extrabold;
+  }
+  .hover-primary{
+    @apply shadow-2xl transition-all transform scale-100;
+  }
+
+  .hover-primary:hover {
+    @apply bg-green-600 scale-105 -translate-y-1;
+  }
+}
