@@ -21,7 +21,7 @@
 }
 
 body {
-  @apply bg-blue-200 font-jim-nightshade;
+  @apply bg-gray-50 font-normal;
 }
 
 /* TODO: Incorporate a theme switcher */
@@ -31,16 +31,21 @@ body {
 
 @layer components {
   .heading{
-    @apply text-2xl font-semibold;
+    @apply text-2xl font-bold;
   }
   .page-heading {
     @apply text-3xl font-extrabold;
   }
   .hover-primary{
-    @apply shadow-2xl transition-all transform scale-100;
+    @apply transition-all transform scale-100;
   }
-
   .hover-primary:hover {
-    @apply bg-green-600 scale-105 -translate-y-1;
+    @apply scale-105 -translate-y-1;
+  }
+  .home-textbox {
+    @apply border-2 rounded focus:outline focus:shadow-xl focus:-translate-y-1 focus:scale-101 w-full h-20 text-4xl text-left pl-3 pr-3 bg-white overflow-hidden;
+  }
+  .input-field {
+    @apply border-2 rounded py-2 mt-1 focus:outline focus:shadow-xl w-full px-3;
   }
 }

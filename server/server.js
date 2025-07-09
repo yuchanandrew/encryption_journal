@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import mysql from "mysql2";
 import jwt from "jsonwebtoken";
+import { verifyJWT } from "./middleware/verifyJWT.js";
 
 dotenv.config();
 
@@ -25,16 +26,20 @@ const pool = mysql.createPool({
 app.use(express.json);
 
 app.post("/register", async(req, res) => {
+    // Get the username and plain_pw from body
     const {username, plain_pw} = req.body;
-    const rounds = 10;
+    const rounds = 10; // Determine the number of salt rounds necessary
 
     try {
+        // Generate the salt using bcrypt
         const salt = await bcrypt.genSalt(rounds);
-        const hashed_pw = await bcrypt.hash(plain_pw, salt);
+        const hashed_pw = await bcrypt.hash(plain_pw, salt); // Hash the password
 
+        // Insert the hashed_pw into user info indatabase
         const insert_query = `INSERT INTO users(username, hashed_pw) VALUES (?, ?)`;
         await pool.query(insert_query, [username, hashed_pw]);
 
+        // Get user (more for testing purposes)
         const get_user = `SELECT * FROM users WHERE username = ?`;
         const [result] = await pool.query(get_user, [username]);
 
@@ -47,37 +52,104 @@ app.post("/register", async(req, res) => {
 });
 
 app.post("/login", async(req, res) => {
-    const {username, plain_pw} = req.params;
+    try {
+        // Retrieve username and plain_pw from body
+        const {username, plain_pw} = req.body;
 
-    const search_query = `SELECT * FROM users WHERE username = ?`;
-    const [result] = await pool.query(search_query, [username]);
+        // Search for the user where username = username from req.body
+        const search_query = `SELECT * FROM users WHERE username = ?`;
+        const [result] = await pool.query(search_query, [username]);
 
-    const user = result[0];
+        // If there is nothing in result, inform client that user by username does not exist
+        if (result === null) {
+            return res.status(401).json({ message: "User does not exist." });
+        }
 
-    const compare = await bcrypt.compare(plain_pw, user.hashed_pw);
+        // If there exists result, user is the 0th index of result
+        const user = result[0];
 
-    if (compare === true) {
-        const accessToken = jwt.sign(
-            {
-                "UserInfo": {
+        // Test the boolean value of comparing the plain_pw to the hashed_pw stored in database
+        const compare = await bcrypt.compare(plain_pw, user.hashed_pw);
+
+        // If the boolean returns true, then we create accessTokens and refreshTokens for the user
+        if (compare === true) {
+            const accessToken = jwt.sign(
+                {
+                    // Sending over user's id and user's username in the UserInfo package
+                    "UserInfo": {
+                        "id": user.id,
+                        "username": username,
+                    }
+                },
+                process.env.ACCESS_TOKEN_SECRET,
+                { expiresIn: "1hr" }
+            );
+
+            const refreshToken = jwt.sign(
+                {
                     "id": user.id,
-                    "username": username,
-                }
-            },
-            process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: "1hr" }
-        );
+                    "username": user.username
+                },
+                process.env.REFRESH_TOKEN_SECRET,
+                {expiresIn: "1d"}
+            );
 
-        const refreshToken = jwt.sign(
-            {"id": user.id},
-            process.env.REFRESH_TOKEN_SECRET,
-            {expiresIn: "1d"}
-        );
+            // Update the user's refresh token
+            const update_query = `UPDATE users SET refresh_token = ? WHERE user_id = ?`;
+            await pool.query(update_query, [refreshToken, user.id]);
 
-        // TODO: Add an update query to add the refresh token to user entity.
+            // Send over a cookie to client with refreshToken
+            res.cookie('jwt', refreshToken, {
+                httpOnly: true,
+                sameSite: "None",
+                secure: true,
+                maxAge: 24 * 60 * 60 * 1000,
+            });
+
+            res.status(200).json({ message: "Login successful.", access: accessToken});
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error with server." });
     }
 });
 
+app.get("/profile", verifyJWT, async(req, res) => {
+    res.status(200).json({
+        message: "Successfully decoded.",
+        user: req.user
+    });
+});
+
+{/* (TEST) SECTION 2: RETRIEVE POSTS & CRUD MODAL FOR POSTS */}
+
+app.get("/collection", async(req, res) => {
+    const search_query = `SELECT * FROM post_test`;
+    const [result] = await pool.query(search_query);
+
+    try {
+        return res.status(200).json({ message: "Posts retrieved successfully", posts: result });
+    } catch(error) {
+        console.error(error);
+        return res.status(500).json({ message: "Server error." });
+    }
+});
+
+app.post("/create-post", async(req, res) => {
+    const {title, content, image_url} = req.body;
+
+    try {
+        const insert_query = `INSERT INTO post_test(title, content, image_url) VALUES (?, ?, ?)`;
+        const [result] = await pool.query(insert_query, [title, content, image_url]);
+
+        return res.status(201).json({ message: "New post created.", post: result[0] });
+    } catch(error) {
+        console.error(error);
+        return res.status(500).json({ message: "Server issue." });
+    }
+});
+
+{/* -------------------------------------------* PORT INFO *------------------------------------------------ */}
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
