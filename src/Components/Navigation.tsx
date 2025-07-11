@@ -17,9 +17,12 @@ const Navigation = () => {
         <Link to="/" className="heading">
           Home
         </Link>
-        <button className="heading hover-primary rounded-xl p-4 bg-chinese-violet">
+        <Link
+          to="/create-post"
+          className="heading hover-primary rounded-xl p-4 bg-chinese-violet"
+        >
           <LuPlus />
-        </button>
+        </Link>
         <Link to="/collection" className="heading">
           Collection
         </Link>

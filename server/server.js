@@ -11,7 +11,7 @@ const app = express();
 
 app.use(cors({
     origin: process.env.CLIENT_PATH,
-    Credential: true
+    credentials: true
 }));
 
 const pool = mysql.createPool({
@@ -23,7 +23,7 @@ const pool = mysql.createPool({
 
 {/* SECTION 1: USER REGISTRATION & AUTHENTICATION */}
 
-app.use(express.json);
+app.use(express.json());
 
 app.post("/register", async(req, res) => {
     // Get the username and plain_pw from body
@@ -123,7 +123,7 @@ app.get("/profile", verifyJWT, async(req, res) => {
 
 {/* (TEST) SECTION 2: RETRIEVE POSTS & CRUD MODAL FOR POSTS */}
 
-app.get("/collection", async(req, res) => {
+app.get("/get-posts", async(req, res) => {
     const search_query = `SELECT * FROM post_test`;
     const [result] = await pool.query(search_query);
 
@@ -137,6 +137,12 @@ app.get("/collection", async(req, res) => {
 
 app.post("/create-post", async(req, res) => {
     const {title, content, image_url} = req.body;
+
+    // console.log("Title:", title);s
+    // console.log("Content:", content);
+    // console.log("Image URL:", image_url);
+
+    // return res.status(201);
 
     try {
         const insert_query = `INSERT INTO post_test(title, content, image_url) VALUES (?, ?, ?)`;

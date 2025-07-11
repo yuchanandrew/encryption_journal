@@ -2,34 +2,38 @@ import React, { useState } from "react";
 import AutoResizeText from "../Components/AutoResizeText";
 import axios from "axios";
 
-const Home = () => {
-  // const [text, setText] = useState(false);
+axios.defaults.withCredentials = true;
+
+const AddPost = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [imageUrl, setImageUrl] = useState("");
 
-  // const handleTextChange = (text: string) => {
-  //   setText(text.trim().length > 0);
-  // };
-
   const handleAdd = async (e: React.FormEvent) => {
+    // Handle on form change
     e.preventDefault();
 
     try {
       const response = await axios.post("http://localhost:3000/create-post", {
+        // Post title, content, and image to route
         title,
         content,
         image_url: imageUrl,
       });
 
       console.log("Post created:", response.data);
+
+      // Reset all form fields!
+      setTitle("");
+      setContent("");
+      setImageUrl("");
     } catch (error) {
       console.error("Failed to create post:", error);
     }
   };
 
   return (
-    <div className="flex flex-col py-6 justify-center items-center space-y-12">
+    <div className="outer-page-div">
       <h2 className="flex page-heading text-center">Tell your secret 🫥</h2>
       <div className="flex flex-col rounded justify-center w-full max-w-xl items-center py-6 bg-gray-200 shadow-lg">
         <form
@@ -45,11 +49,12 @@ const Home = () => {
             placeholder="Name your secret"
             required
           />
-          <label htmlFor="content" className="flex text-center justify-center">
+          <label className="flex text-center justify-center">
             What secret do you have for today?
           </label>
+          {/* Refer to AutoResizeText */}
           <AutoResizeText
-            value={content}
+            value={content} // Fill in props for value, onTextChange, and placeholder (all handled in external component)
             onTextChange={setContent}
             placeholder={"Write your secret..."}
           />
@@ -62,10 +67,7 @@ const Home = () => {
             onChange={(e) => setImageUrl(e.target.value)}
             placeholder="Add an image"
           />
-          <button
-            type="submit"
-            className="hover-primary flex shadow-lg flex-col p-4 w-10/12 rounded-xl font-bold bg-matcha"
-          >
+          <button className="hover-primary flex shadow-lg flex-col p-4 w-10/12 rounded-xl font-bold bg-matcha">
             Submit
           </button>
           {/* {content && (
@@ -82,4 +84,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default AddPost;

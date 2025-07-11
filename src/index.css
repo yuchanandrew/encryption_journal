@@ -30,6 +30,9 @@ body {
 } */
 
 @layer components {
+  .outer-page-div {
+    @apply flex flex-col py-6 justify-center items-center space-y-12;
+  }
   .heading{
     @apply text-2xl font-bold;
   }
