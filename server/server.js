@@ -124,11 +124,12 @@ app.get("/profile", verifyJWT, async(req, res) => {
 {/* (TEST) SECTION 2: RETRIEVE POSTS & CRUD MODAL FOR POSTS */}
 
 app.get("/get-posts", async(req, res) => {
-    const search_query = `SELECT * FROM post_test`;
+    const search_query = `SELECT *, DATE_FORMAT(time_created, '%Y-%m-%d') as post_date, DATE_FORMAT(time_created, '%H:%i:%s') as post_time FROM post_test`;
     const [result] = await pool.query(search_query);
 
     try {
-        return res.status(200).json({ message: "Posts retrieved successfully", posts: result });
+        console.log("result:", result);
+        return res.status(200).json({ message: "Posts retrieved successfully", posts: result});
     } catch(error) {
         console.error(error);
         return res.status(500).json({ message: "Server error." });
@@ -137,12 +138,6 @@ app.get("/get-posts", async(req, res) => {
 
 app.post("/create-post", async(req, res) => {
     const {title, content, image_url} = req.body;
-
-    // console.log("Title:", title);s
-    // console.log("Content:", content);
-    // console.log("Image URL:", image_url);
-
-    // return res.status(201);
 
     try {
         const insert_query = `INSERT INTO post_test(title, content, image_url) VALUES (?, ?, ?)`;
@@ -154,6 +149,46 @@ app.post("/create-post", async(req, res) => {
         return res.status(500).json({ message: "Server issue." });
     }
 });
+
+app.delete("/remove-post/:id", async(req, res) => {
+    const {id} = req.params;
+
+    try {
+        const delete_query = `DELETE FROM post_test WHERE id = ?`;
+        await pool.query(delete_query, [id]);
+
+        return res.status(200).json({ message: "Post removed successfully" });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Server issue"});
+    }
+});
+
+{/* (TEST) SECTION 3: CONNECTION ROUTE TO EMOTIONS ANALYZING MODEL VIA PYTHON API */}
+app.post("/api/emotion", async(req, res) => {
+    const {text} = req.body;
+    try {
+        const response = await fetch("http://localhost:5000/predict", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ text })
+        })
+
+        const data = await response.json();
+
+        return res.status(200).json({ js_emotion: data });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Server issue" });
+    }
+});
+
+// TODO: Add a tagging feature for each emotion.
+
+// app.get("/api/emotion/:type", async(req, res) => {
+//     const { emotion } = req.body;
+
+// })
 
 {/* -------------------------------------------* PORT INFO *------------------------------------------------ */}
 

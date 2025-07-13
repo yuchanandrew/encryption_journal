@@ -51,4 +51,7 @@ body {
   .input-field {
     @apply border-2 rounded py-2 mt-1 focus:outline focus:shadow-xl w-full px-3;
   }
+  .emotion-analysis-heading {
+    @apply text-xl font-medium;
+  }
 }
