@@ -165,6 +165,8 @@ app.delete("/remove-post/:id", async(req, res) => {
 });
 
 {/* (TEST) SECTION 3: CONNECTION ROUTE TO EMOTIONS ANALYZING MODEL VIA PYTHON API */}
+
+// JS server-side communication with Python script
 app.post("/api/emotion", async(req, res) => {
     const {text} = req.body;
     try {
@@ -183,6 +185,7 @@ app.post("/api/emotion", async(req, res) => {
     }
 });
 
+// Route to retrieve all the emotions posted in the day looked up in query
 app.get("/emotions-of-the-day", async(req, res) => {
     const { day } = req.query;
 
@@ -196,6 +199,7 @@ app.get("/emotions-of-the-day", async(req, res) => {
     }
 });
 
+// Route to get all 3 of the most relevant emotions of the day
 app.get("/top-emotions-of-the-day", async(req, res) => {
     const { day } = req.query;
 
@@ -214,6 +218,9 @@ app.get("/top-emotions-of-the-day", async(req, res) => {
     }
 });
 
+// TODO: Retrieve each post's emotion from database compared to having Python re-compute sentiment analysis
+
+// Update emotions to the database
 app.post("/add-emotion", async(req, res) => {
     const { id, emotion } = req.body;
 
@@ -227,12 +234,19 @@ app.post("/add-emotion", async(req, res) => {
     }
 });
 
-// TODO: Add a tagging feature for each emotion.
+// Tagging feature for each emotion
+app.get("/api/emotion/:emotion", async(req, res) => {
+    const { emotion } = req.params;
 
-// app.get("/api/emotion/:type", async(req, res) => {
-//     const { emotion } = req.body;
+    try {
+        const get_query = `SELECT *, DATE_FORMAT(time_created, '%Y-%m-%d') as post_date, DATE_FORMAT(time_created, '%H:%i:%s') as post_time FROM post_test where emotion = ?`;
+        const [result] = await pool.query(get_query, [emotion]);
 
-// })
+        return res.status(200).json({ message: `Details for post_test with emotion = ${emotion} retrieved.`, posts: result});
+    } catch (error) {
+        return res.status(500).json({ message: "Server issue" });
+    }
+});
 
 {/* -------------------------------------------* PORT INFO *------------------------------------------------ */}
 

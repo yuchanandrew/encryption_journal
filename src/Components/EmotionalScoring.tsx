@@ -58,18 +58,18 @@ const EmotionalScoring = () => {
         }
       );
 
-      console.log(response.data);
+      //   console.log(response.data);
 
       const retrievedEmotions = response.data.emotions;
 
-      console.log("Retrieved:", retrievedEmotions);
+      //   console.log("Retrieved:", retrievedEmotions);
 
       const emotionScoresArray = retrievedEmotions.map(
         (emotionScoresItem: { emotion: string }) =>
           emotionScore[emotionScoresItem.emotion]
       );
 
-      console.log(emotionScoresArray);
+      //   console.log(emotionScoresArray);
 
       const compiledScore = emotionScoresArray.reduce(
         (acc: number, currentValue: number) => acc + currentValue,

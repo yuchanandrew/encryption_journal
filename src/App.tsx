@@ -8,6 +8,7 @@ import Register from "./Pages/Register";
 import axios from "axios";
 import AddPost from "./Pages/AddPost";
 import Collection from "./Pages/Collection";
+import EmotionPage from "./Pages/EmotionPage";
 
 axios.defaults.withCredentials = true;
 
@@ -21,6 +22,7 @@ function App() {
           <Route path="/create-post" element={<AddPost />} />
           <Route path="/register" element={<Register />} />
           <Route path="/collection" element={<Collection />} />
+          <Route path="/collection/:emotion" element={<EmotionPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

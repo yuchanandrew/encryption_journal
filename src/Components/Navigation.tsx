@@ -19,7 +19,7 @@ const Navigation = () => {
         </Link>
         <Link
           to="/create-post"
-          className="heading hover-primary rounded-xl p-4 bg-indigo-300"
+          className="heading hover-primary shadow rounded-xl p-4 bg-indigo-300"
         >
           <LuPlus />
         </Link>

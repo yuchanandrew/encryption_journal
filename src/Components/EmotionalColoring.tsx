@@ -65,8 +65,6 @@ const EmotionalColoring = ({ children }: any) => {
         (emotion: { emotion: string }) => emotion.emotion
       );
 
-      console.log("top emotions:", emotions);
-
       setNames(namesArray);
 
       const colorArray = emotions.map(

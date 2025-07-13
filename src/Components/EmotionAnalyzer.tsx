@@ -108,7 +108,7 @@ const EmotionAnalyzer = ({ id, content }: EmotionAnalyzerProps) => {
     <div
       className={`${color} emotion-analysis-heading hover-primary hover:underline shadow py-2 px-4 rounded`}
     >
-      <Link to={`/emotions/${emotion}`}>
+      <Link to={`/collection/${emotion}`}>
         #{emotion} {emoji}
       </Link>
     </div>
