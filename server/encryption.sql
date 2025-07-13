@@ -25,5 +25,6 @@ CREATE TABLE post_test (
     content TEXT NOT NULL,
     image_url TEXT DEFAULT NULL,
     time_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    title TEXT NOT NULL
+    title TEXT NOT NULL,
+    emotion VARCHAR(50) DEFAULT NULL
 );

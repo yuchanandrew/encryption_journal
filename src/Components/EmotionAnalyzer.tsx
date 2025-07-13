@@ -9,7 +9,7 @@ interface EmotionAnalyzerProps {
 }
 
 const EmotionAnalyzer = ({ id, content }: EmotionAnalyzerProps) => {
-  const [emotions, setEmotions] = useState("");
+  const [emotion, setEmotion] = useState("");
   const [color, setColor] = useState("");
   const [emoji, setEmoji] = useState("");
 
@@ -22,7 +22,7 @@ const EmotionAnalyzer = ({ id, content }: EmotionAnalyzerProps) => {
       const data = response.data;
       //   console.log(`Here is the output of ${id}:`, data);
 
-      setEmotions(data.js_emotion.emotion);
+      setEmotion(data.js_emotion.emotion);
     } catch (error) {
       console.error("Something went wrong:", error);
     }
@@ -32,6 +32,26 @@ const EmotionAnalyzer = ({ id, content }: EmotionAnalyzerProps) => {
     analyzeEmotion();
     // console.log("Here is emotions:", emotions);
   }, []);
+
+  // Since emotions are generated after user submits, emotions have to be added into database after as well
+  // SOLUTION: Simply create an update query to add the emotion into designated emotion attribute in table
+  const updateEmotions = async () => {
+    try {
+      const response = await axios.post("http://localhost:3000/add-emotion", {
+        emotion: emotion,
+        id: id,
+      });
+
+      console.log(response.data.message);
+    } catch (error) {
+      console.error("There was an error in updating emotions", error);
+    }
+  };
+
+  // Renders the update whenever emotion attribute is changed
+  useEffect(() => {
+    updateEmotions();
+  }, [emotion]);
 
   const redEmotions = [
     "anger",
@@ -61,34 +81,35 @@ const EmotionAnalyzer = ({ id, content }: EmotionAnalyzerProps) => {
     "approval",
     "amusement",
   ];
+
   const purpleEmotions = ["curiosity", "realization", "surprise", "desire"];
   const grayEmotions = ["neutral"];
 
   useEffect(() => {
-    if (redEmotions.includes(emotions)) {
+    if (redEmotions.includes(emotion)) {
       setColor("bg-red-300");
       setEmoji("😠");
-    } else if (blueEmotions.includes(emotions)) {
+    } else if (blueEmotions.includes(emotion)) {
       setColor("bg-blue-300");
       setEmoji("🙁");
-    } else if (greenEmotions.includes(emotions)) {
+    } else if (greenEmotions.includes(emotion)) {
       setColor("bg-emerald-300");
       setEmoji("🙂");
-    } else if (purpleEmotions.includes(emotions)) {
+    } else if (purpleEmotions.includes(emotion)) {
       setColor("bg-purple-300");
       setEmoji("🙂‍↔️");
-    } else if (grayEmotions.includes(emotions)) {
+    } else if (grayEmotions.includes(emotion)) {
       setColor("bg-gray-200");
       setEmoji("😐");
     }
-  }, [emotions]);
+  }, [emotion]);
 
   return (
     <div
       className={`${color} emotion-analysis-heading hover-primary hover:underline shadow py-2 px-4 rounded`}
     >
-      <Link to={`/emotions/${emotions}`}>
-        #{emotions} {emoji}
+      <Link to={`/emotions/${emotion}`}>
+        #{emotion} {emoji}
       </Link>
     </div>
   );

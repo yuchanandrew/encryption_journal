@@ -183,6 +183,50 @@ app.post("/api/emotion", async(req, res) => {
     }
 });
 
+app.get("/emotions-of-the-day", async(req, res) => {
+    const { day } = req.query;
+
+    try{
+        const search_query = `SELECT emotion FROM post_test WHERE DATE_FORMAT(time_created, '%Y-%m-%d') = ?`;
+        const [result] = await pool.query(search_query, [day]);
+
+        return res.status(200).json({ message: `Successfully retrieved ${day} emotions.`, emotions: result });
+    } catch (error) {
+        return res.status(500).json({ message: "Server issue" });
+    }
+});
+
+app.get("/top-emotions-of-the-day", async(req, res) => {
+    const { day } = req.query;
+
+    try {
+        const search_query = `
+        SELECT emotion, COUNT(*) as count 
+        FROM POST_TEST WHERE DATE_FORMAT(time_created, '%Y-%m-%d') = ? 
+        GROUP BY emotion
+        ORDER BY count DESC
+        LIMIT 3`;
+        const [result] = await pool.query(search_query, [day]);
+
+        res.status(200).json({ message: "Successfully retrieved most frequent emotions.", emotions: result });
+    } catch (error) {
+        res.status(500).json({ message: "Server issue" });
+    }
+});
+
+app.post("/add-emotion", async(req, res) => {
+    const { id, emotion } = req.body;
+
+    try {
+        const update_query = `UPDATE post_test SET emotion = ? WHERE id = ?`;
+        await pool.query(update_query, [emotion, id]);
+
+        return res.status(200).json({ message: "Successfully updated emotions." });
+    } catch (error) {
+        return res.status(500).json({ message: "Server issue" });
+    }
+});
+
 // TODO: Add a tagging feature for each emotion.
 
 // app.get("/api/emotion/:type", async(req, res) => {
