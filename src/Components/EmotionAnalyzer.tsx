@@ -20,7 +20,7 @@ const EmotionAnalyzer = ({ id, content }: EmotionAnalyzerProps) => {
       });
 
       const data = response.data;
-      console.log(`Here is the output of ${id}:`, data);
+      //   console.log(`Here is the output of ${id}:`, data);
 
       setEmotions(data.js_emotion.emotion);
     } catch (error) {
@@ -30,7 +30,7 @@ const EmotionAnalyzer = ({ id, content }: EmotionAnalyzerProps) => {
 
   useEffect(() => {
     analyzeEmotion();
-    console.log("Here is emotions:", emotions);
+    // console.log("Here is emotions:", emotions);
   }, []);
 
   const redEmotions = [
@@ -59,6 +59,7 @@ const EmotionAnalyzer = ({ id, content }: EmotionAnalyzerProps) => {
     "relief",
     "admiration",
     "approval",
+    "amusement",
   ];
   const purpleEmotions = ["curiosity", "realization", "surprise", "desire"];
   const grayEmotions = ["neutral"];
@@ -84,7 +85,7 @@ const EmotionAnalyzer = ({ id, content }: EmotionAnalyzerProps) => {
 
   return (
     <div
-      className={`${color} emotion-analysis-heading hover-primary shadow py-2 px-4 rounded`}
+      className={`${color} emotion-analysis-heading hover-primary hover:underline shadow py-2 px-4 rounded`}
     >
       <Link to={`/emotions/${emotions}`}>
         #{emotions} {emoji}
