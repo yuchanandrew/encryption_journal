@@ -136,14 +136,35 @@ app.get("/get-posts", async(req, res) => {
     }
 });
 
+// Retrieve a post with specific id
+app.get("/get-posts/:id", async(req, res) => {
+    const {id} = req.params;
+
+    try {
+        const search_query = `SELECT *, DATE_FORMAT(time_created, '%Y-%m-%d') as post_date, DATE_FORMAT(time_created, '%H:%i:%s') as post_time FROM post_test WHERE id = ?`;
+        const [result] = await pool.query(search_query, [id]);
+
+        return res.status(200).json({ message: `Successfully retrieved post with id = ${id}!`, post: result[0]});
+    } catch (error) {
+        return res.status(500).json({ message: "Server issue", error: error });
+    }
+})
+
 app.post("/create-post", async(req, res) => {
     const {title, content, image_url} = req.body;
 
     try {
         const insert_query = `INSERT INTO post_test(title, content, image_url) VALUES (?, ?, ?)`;
-        const [result] = await pool.query(insert_query, [title, content, image_url]);
+        const [insert_result] = await pool.query(insert_query, [title, content, image_url]);
 
-        return res.status(201).json({ message: "New post created.", post: result[0] });
+        const newId = insert_result.insertId;
+
+        const search_query = `SELECT * FROM post_test WHERE id = ?`;
+        const [search_result] = await pool.query(search_query, [newId]);
+
+        const newPost = search_result[0];
+
+        return res.status(201).json({ message: "New post created.", post: newPost });
     } catch(error) {
         console.error(error);
         return res.status(500).json({ message: "Server issue." });
@@ -219,6 +240,20 @@ app.get("/top-emotions-of-the-day", async(req, res) => {
 });
 
 // TODO: Retrieve each post's emotion from database compared to having Python re-compute sentiment analysis
+app.get("/get-emotion/:id", async(req, res) => {
+    const {id} = req.params;
+    
+    try {
+        const search_query = `SELECT * FROM post_test WHERE id = ?`;
+        const [result] = await pool.query(search_query, [id]);
+
+        const resultEmotion = result[0].emotion;
+
+        return res.status(200).json({ message: "Emotion successfully retrieved.", emotion: resultEmotion });
+    } catch (error) {
+        return res.status(500).json({ message: "Server issue" });
+    }
+})
 
 // Update emotions to the database
 app.post("/add-emotion", async(req, res) => {

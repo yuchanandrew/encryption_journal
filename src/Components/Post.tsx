@@ -2,7 +2,9 @@ import axios from "axios";
 import React from "react";
 import { FaTrash } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
-import EmotionAnalyzer from "./EmotionAnalyzer";
+import EmotionDisplay from "./EmotionDisplay";
+
+import { Link } from "react-router-dom";
 
 interface PostProps {
   id: number;
@@ -32,30 +34,37 @@ const Post = ({
     onDelete(id);
   };
   return (
-    <div className="flex flex-col bg-matcha px-4 py-6 rounded shadow space-y-4">
+    <div className="flex flex-col h-72 hover-primary bg-gray-50 px-4 py-6 rounded-xl shadow space-y-4">
       <div className="flex justify-between">
-        <h2 className="heading">{title}</h2>
-        <EmotionAnalyzer id={id} content={content} />
+        <Link to={`/collection/posts/${id}`}>
+          <h2 className="heading hover:underline">{title}</h2>
+        </Link>
+        <EmotionDisplay id={id} />
       </div>
       <div className="flex flex-row justify-between">
-        <p className="">{content}</p>
+        <Link to={`/collection/posts/${id}`}>
+          <p className="text-sm line-clamp-3">{content}</p>
+        </Link>
         {image_url != "" && image_url != null && (
           <img className="w-48 h-48 object-cover" src={image_url} alt={title} />
         )}
       </div>
-      <p className="text-gray-600 text-sm">
-        Posted on {date} at {time}.
-      </p>
-      <div className="flex justify-between">
-        <button
-          onClick={handleDelete}
-          className="flex bg-red-300 rounded-xl shadow hover-primary p-3 w-2/5 justify-center"
-        >
-          <FaTrash />
-        </button>
-        <button className="flex bg-sky-300 rounded-xl shadow hover-primary p-3 w-2/5 justify-center">
-          <FaEdit />
-        </button>
+      <div className="mt-auto flex flex-col space-y-4">
+        <div className="border-1 w-full text-gray-200"></div>
+        <p className="text-gray-600 text-sm">
+          Posted on {date} at {time}.
+        </p>
+        <div className="flex justify-end gap-2">
+          <button
+            onClick={handleDelete}
+            className="flex bg-red-300 rounded-xl shadow hover-primary p-2 justify-center"
+          >
+            <FaTrash />
+          </button>
+          <button className="flex bg-sky-300 rounded-xl shadow hover-primary p-2 justify-center">
+            <FaEdit />
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -68,18 +68,18 @@ const Collection = () => {
 
   return (
     <div className="outer-page-div">
-      <h2 className="page-heading flex">Let's reveal your secrets 🤯</h2>
+      <h2 className="page-heading flex">Let's look at your posts 🤯</h2>
       {/* Map the dates: split() creates mutable copy of dates, reverse() reverses the copied array */}
       {dates
         .slice()
         .reverse()
         .map((date) => (
-          <div key={date} className="flex flex-col px-4">
+          <div key={date} className="flex w-full flex-col px-4">
             {/* Input the default formatted date into the custom format */}
             <h2 className="heading mb-4">{formatDate(date)}</h2>
-            <div className="border-1 w-full text-gray-300 mb-4"></div>
+            <div className="border-2 rounded-xl w-full text-gray-300 mb-4"></div>
             <div className="flex justify-center">
-              <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 items-start">
+              <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
                 {/* Mapping the posts: filter() ensures that dates stay within their given date of creation */}
                 {posts
                   // Slicing and reversing (yet again) to ensure most recent post appears first

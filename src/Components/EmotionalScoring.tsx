@@ -45,7 +45,8 @@ const EmotionalScoring = () => {
   const [totalScore, setTotalScore] = useState(0);
 
   const now = new Date();
-  const nowToTimestamp = now.toISOString().slice(0, 10);
+  const nowToTimestamp = new Intl.DateTimeFormat("en-CA").format(now);
+  // const nowToTimestamp = now.toISOString().slice(0, 10);
 
   const fetchDayEmotions = async () => {
     try {

@@ -42,10 +42,10 @@ const EmotionalColoring = ({ children }: any) => {
   };
 
   const now = new Date();
-  const nowToTimestamp = now.toISOString().slice(0, 10);
+  const nowToTimestamp = new Intl.DateTimeFormat("en-CA").format(now);
 
   const gradientStyle = {
-    background: `linear-gradient(to right, ${colors[0]}, ${colors[1]}, ${colors[2]})`,
+    background: `radial-gradient(${colors[0]}, ${colors[1]}, ${colors[2]})`,
   };
 
   const fetchTopEmotions = async () => {
@@ -84,16 +84,18 @@ const EmotionalColoring = ({ children }: any) => {
   return (
     <div
       style={gradientStyle}
-      className="flex flex-col bg-blue-gray rounded w-full px-4 py-8 justify-center items-center space-y-6"
+      className="flex flex-col bg-blue-gray rounded shadow w-full px-4 py-8 justify-center items-center space-y-6"
     >
       <h2 className="flex heading">Emotions of the Day</h2>
       {children}
-      <h2>Your top emotions:</h2>
-      <ul className="list-disc list-inside">
-        <li>{names[0]}</li>
-        <li>{names[1]}</li>
-        <li>{names[2]}</li>
-      </ul>
+      <div>
+        <h2>Your top emotions:</h2>
+        <ul className="list-disc list-inside">
+          <li>{names[0]}</li>
+          <li>{names[1]}</li>
+          <li>{names[2]}</li>
+        </ul>
+      </div>
     </div>
   );
 };

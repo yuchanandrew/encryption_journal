@@ -47,7 +47,7 @@ const EmotionPage = () => {
   return (
     <div className="outer-page-div">
       <h2 className="page-heading flex">#{emotion}</h2>
-      <div className="px-4 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 items-start">
+      <div className="px-4 w-full grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
         {listOfPosts.map((post: PostType) => (
           <Post
             key={post.id}

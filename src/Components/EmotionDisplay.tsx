@@ -3,55 +3,35 @@ import { useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
 
-interface EmotionAnalyzerProps {
+interface EmotionDisplayProps {
   id: number;
-  content: string;
 }
 
-const EmotionAnalyzer = ({ id, content }: EmotionAnalyzerProps) => {
+const EmotionDisplay = ({ id }: EmotionDisplayProps) => {
   const [emotion, setEmotion] = useState("");
   const [color, setColor] = useState("");
   const [emoji, setEmoji] = useState("");
 
-  const analyzeEmotion = async () => {
+  const fetchEmotion = async () => {
     try {
-      const response = await axios.post("http://localhost:3000/api/emotion", {
-        text: content,
-      });
+      const response = await axios.get(
+        `http://localhost:3000/get-emotion/${id}`
+      );
 
-      const data = response.data;
-      //   console.log(`Here is the output of ${id}:`, data);
+      const retrievedEmotion = response.data.emotion;
 
-      setEmotion(data.js_emotion.emotion);
+      setEmotion(retrievedEmotion);
     } catch (error) {
-      console.error("Something went wrong:", error);
+      console.error(
+        "Something went wrong while emotion was being retrieved:",
+        error
+      );
     }
   };
 
   useEffect(() => {
-    analyzeEmotion();
-    // console.log("Here is emotions:", emotions);
-  }, []);
-
-  // Since emotions are generated after user submits, emotions have to be added into database after as well
-  // SOLUTION: Simply create an update query to add the emotion into designated emotion attribute in table
-  const updateEmotions = async () => {
-    try {
-      const response = await axios.post("http://localhost:3000/add-emotion", {
-        emotion: emotion,
-        id: id,
-      });
-
-      console.log(response.data.message);
-    } catch (error) {
-      console.error("There was an error in updating emotions", error);
-    }
-  };
-
-  // Renders the update whenever emotion attribute is changed
-  useEffect(() => {
-    updateEmotions();
-  }, [emotion]);
+    fetchEmotion();
+  }, [id]);
 
   const redEmotions = [
     "anger",
@@ -106,13 +86,13 @@ const EmotionAnalyzer = ({ id, content }: EmotionAnalyzerProps) => {
 
   return (
     <div
-      className={`${color} emotion-analysis-heading hover-primary hover:underline shadow py-2 px-4 rounded`}
+      className={`${color} text-sm hover:underline shadow py-2 px-4 rounded-3xl`}
     >
-      <Link to={`/collection/${emotion}`}>
+      <Link to={`/collection/emotions/${emotion}`}>
         #{emotion} {emoji}
       </Link>
     </div>
   );
 };
 
-export default EmotionAnalyzer;
+export default EmotionDisplay;
