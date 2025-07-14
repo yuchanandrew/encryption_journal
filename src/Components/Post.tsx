@@ -1,5 +1,4 @@
 import axios from "axios";
-import React from "react";
 import { FaTrash } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
 import EmotionDisplay from "./EmotionDisplay";
@@ -34,7 +33,7 @@ const Post = ({
     onDelete(id);
   };
   return (
-    <div className="flex flex-col h-72 hover-primary bg-gray-50 px-4 py-6 rounded-xl shadow space-y-4">
+    <div className="flex flex-col h-72 hover-primary bg-gray-50 px-4 py-6 rounded-xl space-y-4">
       <div className="flex justify-between">
         <Link to={`/collection/posts/${id}`}>
           <h2 className="heading hover:underline">{title}</h2>

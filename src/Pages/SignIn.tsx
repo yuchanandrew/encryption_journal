@@ -2,34 +2,23 @@ import axios from "axios";
 import React, { useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 
-const Register = () => {
-  const [username, setUsername] = useState("");
+const SignIn = () => {
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (password !== confirmPassword) {
-      alert("Passwords don't match");
-
-      return;
-    }
-
     try {
-      const response = await axios.post("http://localhost:3000/register", {
-        username: username,
+      const response = await axios.post("http://localhost:3000/sign-in", {
         email: emailAddress,
         plain_pw: password,
       });
 
-      console.log("Registered user's username:", response.data.user.username);
+      console.log("Sign in confirmation:", response.data.message);
 
-      setUsername("");
       setEmailAddress("");
       setPassword("");
-      setConfirmPassword("");
     } catch (error) {
       console.error("Something went wrong while registering user.", error);
     }
@@ -39,18 +28,6 @@ const Register = () => {
       <h2 className="flex page-heading">Register</h2>
       <div className="w-full max-w-lg bg-gray-200 rounded">
         <form onSubmit={handleRegister} className="p-4">
-          <div className="mb-4">
-            <label htmlFor="username">Username</label>
-            <input
-              id="username"
-              className="input-field"
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Enter your username..."
-              required
-            />
-          </div>
           <div className="mb-4">
             <label htmlFor="email_address">Email Address</label>
             <input
@@ -75,25 +52,13 @@ const Register = () => {
               required
             />
           </div>
-          <div className="mb-4">
-            <label htmlFor="confirm_password">Confirm Password</label>
-            <input
-              id="confirm_password"
-              className="input-field"
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Enter password again..."
-              required
-            />
-          </div>
           <div className="flex justify-center">
             <button className="flex hover-primary mt-8 font-semibold bg-matcha w-1/2 rounded py-4 justify-center items-center">
-              Register
+              Sign In
             </button>
           </div>
           <div className="flex justify-center py-3 mt-4">
-            <p>- Or register through -</p>
+            <p>- Or sign in through -</p>
           </div>
           <div className="flex justify-center mt-4 mb-4">
             <FaGoogle size={25} />
@@ -104,4 +69,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default SignIn;

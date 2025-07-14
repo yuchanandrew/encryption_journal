@@ -4,6 +4,7 @@ import cors from "cors";
 import mysql from "mysql2";
 import jwt from "jsonwebtoken";
 import { verifyJWT } from "./middleware/verifyJWT.js";
+import bcrypt from "bcrypt";
 
 dotenv.config();
 
@@ -21,13 +22,13 @@ const pool = mysql.createPool({
     database: 'encrypt'
 }).promise();
 
-{/* SECTION 1: USER REGISTRATION & AUTHENTICATION */}
+{/* (TEST) SECTION 1: USER REGISTRATION & AUTHENTICATION */}
 
 app.use(express.json());
 
 app.post("/register", async(req, res) => {
     // Get the username and plain_pw from body
-    const {username, plain_pw} = req.body;
+    const {username, email, plain_pw} = req.body;
     const rounds = 10; // Determine the number of salt rounds necessary
 
     try {
@@ -36,14 +37,14 @@ app.post("/register", async(req, res) => {
         const hashed_pw = await bcrypt.hash(plain_pw, salt); // Hash the password
 
         // Insert the hashed_pw into user info indatabase
-        const insert_query = `INSERT INTO users(username, hashed_pw) VALUES (?, ?)`;
-        await pool.query(insert_query, [username, hashed_pw]);
+        const insert_query = `INSERT INTO users(username, email, hashed_pw) VALUES (?, ?, ?)`;
+        await pool.query(insert_query, [username, email, hashed_pw]);
 
         // Get user (more for testing purposes)
         const get_user = `SELECT * FROM users WHERE username = ?`;
         const [result] = await pool.query(get_user, [username]);
 
-        return res.status(201).json({ message: "New user created successfully!", user: result});
+        return res.status(201).json({ message: "New user created successfully!", user: result[0]});
     } catch (error) {
         console.error(error);
 
@@ -51,14 +52,14 @@ app.post("/register", async(req, res) => {
     }
 });
 
-app.post("/login", async(req, res) => {
+app.post("/sign-in", async(req, res) => {
     try {
         // Retrieve username and plain_pw from body
-        const {username, plain_pw} = req.body;
+        const {email, plain_pw} = req.body;
 
         // Search for the user where username = username from req.body
-        const search_query = `SELECT * FROM users WHERE username = ?`;
-        const [result] = await pool.query(search_query, [username]);
+        const search_query = `SELECT * FROM users WHERE email = ?`;
+        const [result] = await pool.query(search_query, [email]);
 
         // If there is nothing in result, inform client that user by username does not exist
         if (result === null) {
@@ -78,7 +79,8 @@ app.post("/login", async(req, res) => {
                     // Sending over user's id and user's username in the UserInfo package
                     "UserInfo": {
                         "id": user.id,
-                        "username": username,
+                        "username": user.username,
+                        "email": user.email
                     }
                 },
                 process.env.ACCESS_TOKEN_SECRET,
@@ -88,14 +90,15 @@ app.post("/login", async(req, res) => {
             const refreshToken = jwt.sign(
                 {
                     "id": user.id,
-                    "username": user.username
+                    "username": user.username,
+                    "email": user.email
                 },
                 process.env.REFRESH_TOKEN_SECRET,
                 {expiresIn: "1d"}
             );
 
             // Update the user's refresh token
-            const update_query = `UPDATE users SET refresh_token = ? WHERE user_id = ?`;
+            const update_query = `UPDATE users SET refresh_token = ? WHERE id = ?`;
             await pool.query(update_query, [refreshToken, user.id]);
 
             // Send over a cookie to client with refreshToken

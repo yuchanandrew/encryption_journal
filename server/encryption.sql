@@ -8,7 +8,8 @@ CREATE TABLE users (
     profile_img_url TEXT DEFAULT NULL,
     bio VARCHAR(500) DEFAULT NULL,
     time_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    refresh_token VARCHAR(512) DEFAULT NULL
+    refresh_token VARCHAR(512) DEFAULT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL
 );
 
 CREATE TABLE posts (
@@ -17,6 +18,8 @@ CREATE TABLE posts (
     content TEXT NOT NULL,
     image_url TEXT DEFAULT NULL,
     time_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    emotion VARCHAR(50) DEFAULT NULL,
+    privacy_mode BOOLEAN DEFAULT TRUE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./Components/Layout";
 import "./index.css";
@@ -10,6 +9,7 @@ import AddPost from "./Pages/AddPost";
 import Collection from "./Pages/Collection";
 import EmotionPage from "./Pages/EmotionPage";
 import PostPage from "./Pages/PostPage";
+import SignIn from "./Pages/SignIn";
 
 axios.defaults.withCredentials = true;
 
@@ -22,6 +22,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/create-post" element={<AddPost />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/sign-in" element={<SignIn />} />
           <Route path="/collection" element={<Collection />} />
           <Route
             path="/collection/emotions/:emotion"

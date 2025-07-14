@@ -6,6 +6,7 @@ import ProfilePop from "./ProfilePop";
 
 const Navigation = () => {
   const [click, setClick] = useState(false);
+  const [userPresent, setUserPresent] = useState(false);
 
   const handleClick = () => {
     setClick(!click);
@@ -27,11 +28,30 @@ const Navigation = () => {
           Collection
         </Link>
       </div>
-      <div className="absolute right-5 top-5 z-50">
-        <button onClick={handleClick} className="hover-primary">
-          <IoPersonCircle size={50} />
-        </button>
-        {click && <ProfilePop />}
+      <div className="absolute right-5 top-5 z-50 items-center">
+        {userPresent ? (
+          <div className="flex flex-row items-center bg-gray-200 px-2 rounded-2xl">
+            <button onClick={handleClick} className="hover-primary">
+              <IoPersonCircle size={50} />
+            </button>
+            {click && <ProfilePop />}
+          </div>
+        ) : (
+          <div className="flex flex-row gap-2 items-center justify-center rounded-2xl">
+            <Link
+              to="/register"
+              className="hover:underline hover:bg-gray-300 bg-gray-200 rounded-xl p-3 shadow"
+            >
+              Register
+            </Link>
+            <Link
+              to="/sign-in"
+              className="hover:underline hover:bg-sky-300 bg-sky-200 rounded-xl p-3 shadow"
+            >
+              Sign In
+            </Link>{" "}
+          </div>
+        )}
       </div>
     </div>
   );

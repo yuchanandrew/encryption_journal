@@ -43,7 +43,7 @@ body {
     @apply transition-all transform scale-100;
   }
   .hover-primary:hover {
-    @apply scale-103 -translate-y-1;
+    @apply scale-103 -translate-y-1 shadow-2xl;
   }
   .home-textbox {
     @apply border-2 rounded focus:outline focus:shadow-xl focus:-translate-y-1 focus:scale-101 w-full h-20 text-lg text-left pl-3 pr-3 bg-white overflow-hidden;
