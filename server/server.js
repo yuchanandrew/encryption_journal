@@ -117,7 +117,7 @@ app.post("/sign-in", async(req, res) => {
     }
 });
 
-app.get("/profile", verifyJWT, async(req, res) => {
+app.get("/auth", verifyJWT, async(req, res) => {
     res.status(200).json({
         message: "Successfully decoded.",
         user: req.user

@@ -1,12 +1,23 @@
 import { Link } from "react-router-dom";
 import { LuPlus } from "react-icons/lu";
 import { IoPersonCircle } from "react-icons/io5";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import ProfilePop from "./ProfilePop";
+import AuthContext from "./Context/AuthProvider";
 
 const Navigation = () => {
   const [click, setClick] = useState(false);
   const [userPresent, setUserPresent] = useState(false);
+
+  const auth = useContext(AuthContext);
+
+  if (!auth) {
+    throw new Error("AuthContext must be used within AuthProvider.");
+  }
+
+  // TODO: Add auth-dependent layout.
+
+  // const { user, accessToken, verifyUser, login, logout } = auth;
 
   const handleClick = () => {
     setClick(!click);
@@ -14,7 +25,6 @@ const Navigation = () => {
   return (
     <div className="relative bg-matcha py-4 shadow-lg">
       <div className="flex flex-wrap gap-8 justify-center items-center">
-        {" "}
         <Link to="/" className="heading">
           Home
         </Link>
@@ -46,10 +56,10 @@ const Navigation = () => {
             </Link>
             <Link
               to="/sign-in"
-              className="hover:underline hover:bg-sky-300 bg-sky-200 rounded-xl p-3 shadow"
+              className="hover:underline hover:bg-sky-400 bg-sky-300 rounded-xl p-3 shadow"
             >
               Sign In
-            </Link>{" "}
+            </Link>
           </div>
         )}
       </div>
