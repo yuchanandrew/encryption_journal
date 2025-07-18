@@ -19,7 +19,9 @@ export const verifyJWT = (req, res, next) => {
     try {
         // Decode the token
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-        req.user = decoded.userInfo; // Set req.user to userInfo in decoded data
+
+        // BUG FIX: It took me a really long time to realize that userInfo is actually UserInfo
+        req.user = decoded.UserInfo; // Set req.user to UserInfo in decoded data
 
         next(); // Move to next middleware
     } catch (error) {

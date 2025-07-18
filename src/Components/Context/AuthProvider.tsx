@@ -3,10 +3,17 @@ import { createContext, useState } from "react";
 import type { ReactNode } from "react";
 
 // Define the shape of the user
+
+// IMPORTANT TODO: Figure out if putting hashed_pw or refresh_token in user's shape would compromise users during production!!
 interface User {
   id: number | null;
   username: string;
   email: string;
+  hashed_pw: string;
+  profile_img_url: string | null;
+  bio: string | null;
+  refresh_token: string;
+  time_created: string;
 }
 
 // Define the shape of authorization
@@ -53,6 +60,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const logout = () => {
     setUser(null);
+    setAccessToken(null);
   };
 
   return (

@@ -84,7 +84,7 @@ app.post("/sign-in", async(req, res) => {
                     }
                 },
                 process.env.ACCESS_TOKEN_SECRET,
-                { expiresIn: "1hr" }
+                { expiresIn: "15m" }
             );
 
             const refreshToken = jwt.sign(
@@ -109,7 +109,9 @@ app.post("/sign-in", async(req, res) => {
                 maxAge: 24 * 60 * 60 * 1000,
             });
 
-            res.status(200).json({ message: "Login successful.", access: accessToken});
+            console.log("token:", accessToken);
+
+            res.status(200).json({ message: "Login successful.", access: accessToken, user: user});
         }
     } catch (error) {
         console.error(error);
@@ -122,6 +124,12 @@ app.get("/auth", verifyJWT, async(req, res) => {
         message: "Successfully decoded.",
         user: req.user
     });
+});
+
+app.post("/sign-out", async(req, res) => {
+    res.clearCookie('jwt', {httpOnly: true, sameSite: "None", secure: true});
+
+    res.status(204).send();
 });
 
 {/* (TEST) SECTION 2: RETRIEVE POSTS & CRUD MODAL FOR POSTS */}

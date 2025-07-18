@@ -1,12 +1,15 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { FaGoogle } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [username, setUsername] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const navigate = useNavigate();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,6 +33,8 @@ const Register = () => {
       setEmailAddress("");
       setPassword("");
       setConfirmPassword("");
+
+      navigate("/sign-in");
     } catch (error) {
       console.error("Something went wrong while registering user.", error);
     }

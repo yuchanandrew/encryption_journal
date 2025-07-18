@@ -4,10 +4,11 @@ import { IoPersonCircle } from "react-icons/io5";
 import { useContext, useState } from "react";
 import ProfilePop from "./ProfilePop";
 import AuthContext from "./Context/AuthProvider";
+import axios from "axios";
+import SignOutComponent from "./SignOutComponent";
 
 const Navigation = () => {
   const [click, setClick] = useState(false);
-  const [userPresent, setUserPresent] = useState(false);
 
   const auth = useContext(AuthContext);
 
@@ -17,7 +18,7 @@ const Navigation = () => {
 
   // TODO: Add auth-dependent layout.
 
-  // const { user, accessToken, verifyUser, login, logout } = auth;
+  const { user } = auth;
 
   const handleClick = () => {
     setClick(!click);
@@ -39,12 +40,15 @@ const Navigation = () => {
         </Link>
       </div>
       <div className="absolute right-5 top-5 z-50 items-center">
-        {userPresent ? (
-          <div className="flex flex-row items-center bg-gray-200 px-2 rounded-2xl">
+        {user ? (
+          <div className="flex flex-row items-center bg-gray-200 px-3 gap-4 rounded-3xl">
+            <h2>Welcome, {user.username}.</h2>
             <button onClick={handleClick} className="hover-primary">
               <IoPersonCircle size={50} />
             </button>
-            {click && <ProfilePop />}
+            {/* TODO: Re-format ProfilePop.tsx... */}
+            {/* {click && <ProfilePop />} */}
+            <SignOutComponent />
           </div>
         ) : (
           <div className="flex flex-row gap-2 items-center justify-center rounded-2xl">

@@ -1,10 +1,22 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FaGoogle } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import AuthContext from "../Components/Context/AuthProvider";
 
 const SignIn = () => {
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
+
+  const auth = useContext(AuthContext);
+
+  if (!auth) {
+    throw new Error("AuthContext must be used within AuthProvider.");
+  }
+
+  const { user, login } = auth;
+
+  const navigate = useNavigate();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -15,10 +27,15 @@ const SignIn = () => {
         plain_pw: password,
       });
 
-      console.log("Sign in confirmation:", response.data.message);
+      login(response.data.access);
+
+      console.log("User:", user);
 
       setEmailAddress("");
       setPassword("");
+
+      // TODO: Eventually replace redirect to user's profile.
+      navigate("/");
     } catch (error) {
       console.error("Something went wrong while registering user.", error);
     }
