@@ -1,14 +1,15 @@
 import { Link } from "react-router-dom";
 import { LuPlus } from "react-icons/lu";
 import { IoPersonCircle } from "react-icons/io5";
-import { useContext, useState } from "react";
-import ProfilePop from "./ProfilePop";
+import { useContext, useEffect, useRef, useState } from "react";
 import AuthContext from "./Context/AuthProvider";
-import axios from "axios";
 import SignOutComponent from "./SignOutComponent";
 
 const Navigation = () => {
-  const [click, setClick] = useState(false);
+  const dropdown = useRef<HTMLDivElement>(null);
+  const profile = useRef<HTMLButtonElement>(null);
+
+  const [open, setOpen] = useState(false);
 
   const auth = useContext(AuthContext);
 
@@ -20,9 +21,26 @@ const Navigation = () => {
 
   const { user } = auth;
 
-  const handleClick = () => {
-    setClick(!click);
-  };
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (!open && profile.current?.contains(e.target as Node)) {
+        setOpen(true);
+      } else if (
+        open &&
+        dropdown.current &&
+        !dropdown.current?.contains(e.target as Node)
+      ) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+    };
+  }, [open]);
+
   return (
     <div className="relative bg-matcha py-4 shadow-lg">
       <div className="flex flex-wrap gap-8 justify-center items-center">
@@ -41,14 +59,25 @@ const Navigation = () => {
       </div>
       <div className="absolute right-5 top-5 z-50 items-center">
         {user ? (
-          <div className="flex flex-row items-center bg-gray-200 px-3 gap-4 rounded-3xl">
-            <h2>Welcome, {user.username}.</h2>
-            <button onClick={handleClick} className="hover-primary">
-              <IoPersonCircle size={50} />
-            </button>
-            {/* TODO: Re-format ProfilePop.tsx... */}
-            {/* {click && <ProfilePop />} */}
-            <SignOutComponent />
+          <div className="flex flex-col space-y-2">
+            <div className="flex flex-row items-center bg-gray-200 px-3 gap-4 rounded-3xl">
+              <h2>Welcome, {user.username}.</h2>
+              <button ref={profile} className="hover-primary">
+                <IoPersonCircle size={50} />
+              </button>
+              {/* TODO: Re-format ProfilePop.tsx... */}
+            </div>
+            {open && (
+              <div
+                ref={dropdown}
+                className="relative shadow-xl flex flex-col justify-between items-center space-y-4 bg-gray-300 rounded-xl w-full py-6 px-2 right-0 h-auto z-50"
+              >
+                <Link to="/profile" className="flex">
+                  Profile
+                </Link>
+                <SignOutComponent />
+              </div>
+            )}
           </div>
         ) : (
           <div className="flex flex-row gap-2 items-center justify-center rounded-2xl">

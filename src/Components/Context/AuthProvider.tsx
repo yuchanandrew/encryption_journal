@@ -23,6 +23,7 @@ interface AuthContextType {
   login: (accessToken: string) => Promise<void>;
   logout: () => void;
   verifyUser: (accessToken: string) => Promise<void>;
+  updateUser: (updated: Partial<User>) => void;
 }
 
 // Create context that defaults to null if AuthContextType does not exist
@@ -54,6 +55,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
+  const updateUser = (updated: Partial<User>) => {
+    setUser((prevUser) => (prevUser ? { ...prevUser, ...updated } : prevUser));
+  };
+
   const login = async (token: string) => {
     await verifyUser(token);
   };
@@ -65,7 +70,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, accessToken, verifyUser, login, logout }}
+      value={{ user, accessToken, verifyUser, updateUser, login, logout }}
     >
       {children}
     </AuthContext.Provider>

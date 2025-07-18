@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import AuthContext from "./Context/AuthProvider";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -23,8 +23,11 @@ const SignOutComponent = () => {
   };
 
   return (
-    <button onClick={handleLogout} className="p-2 bg-sky-300">
-      Sign Out!
+    <button
+      onClick={handleLogout}
+      className="p-2 bg-red-300 rounded-xl w-full hover:bg-red-400 shadow"
+    >
+      Sign Out
     </button>
   );
 };

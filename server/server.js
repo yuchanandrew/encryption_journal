@@ -119,6 +119,19 @@ app.post("/sign-in", async(req, res) => {
     }
 });
 
+app.put("/update-profile", async(req, res) => {
+    const {id, bio, profile_img_url} = req.body;
+
+    try {
+        const update_query = `UPDATE users SET bio = ?, profile_img_url = ? WHERE id = ?`;
+        await pool.query(update_query, [bio, profile_img_url, id]);
+
+        return res.status(200).json({ message: "User's profile has been successfully updated." });
+    } catch (error) {
+        return res.status(500).json({ message: "Server issue." });
+    }
+});
+
 app.get("/auth", verifyJWT, async(req, res) => {
     res.status(200).json({
         message: "Successfully decoded.",

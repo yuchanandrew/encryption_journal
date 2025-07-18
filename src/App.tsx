@@ -11,6 +11,7 @@ import EmotionPage from "./Pages/EmotionPage";
 import PostPage from "./Pages/PostPage";
 import SignIn from "./Pages/SignIn";
 import SignOutPage from "./Pages/SignOutPage";
+import Profile from "./Pages/Profile";
 
 axios.defaults.withCredentials = true;
 
@@ -24,6 +25,7 @@ function App() {
           <Route path="/create-post" element={<AddPost />} />
           <Route path="/register" element={<Register />} />
           <Route path="/sign-in" element={<SignIn />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/sign-out-confirmation" element={<SignOutPage />} />
           <Route path="/collection" element={<Collection />} />
           <Route
