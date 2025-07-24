@@ -12,6 +12,8 @@ import PostPage from "./Pages/PostPage";
 import SignIn from "./Pages/SignIn";
 import SignOutPage from "./Pages/SignOutPage";
 import Profile from "./Pages/Profile";
+import PrivateJournal from "./Pages/PrivateJournal";
+import Test from "./Pages/Test";
 
 axios.defaults.withCredentials = true;
 
@@ -23,16 +25,26 @@ function App() {
           {/* TODO: Add more pages here when made */}
           <Route path="/" element={<Home />} />
           <Route path="/create-post" element={<AddPost />} />
+
+          {/* Routes related to user creation/deletion/retrieval */}
           <Route path="/register" element={<Register />} />
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/sign-out-confirmation" element={<SignOutPage />} />
+
+          {/* Routes related to viewing journal/collective */}
           <Route path="/collection" element={<Collection />} />
+          <Route path="/collection/posts/:id" element={<PostPage />} />
+          <Route path="/journal" element={<PrivateJournal />} />
+
+          {/* Routes related to emotion tagging */}
           <Route
             path="/collection/emotions/:emotion"
             element={<EmotionPage />}
           />
-          <Route path="/collection/posts/:id" element={<PostPage />} />
+
+          {/* Testing route for button */}
+          <Route path="/test" element={<Test />} />
         </Route>
       </Routes>
     </BrowserRouter>

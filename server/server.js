@@ -119,6 +119,7 @@ app.post("/sign-in", async(req, res) => {
     }
 });
 
+// TODO: Add verifyJWT and match requested user id to authenticated user id
 app.put("/update-profile", async(req, res) => {
     const {id, bio, profile_img_url} = req.body;
 
@@ -154,9 +155,8 @@ app.get("/get-posts", async(req, res) => {
     try {
         console.log("result:", result);
         return res.status(200).json({ message: "Posts retrieved successfully", posts: result});
-    } catch(error) {
-        console.error(error);
-        return res.status(500).json({ message: "Server error." });
+    } catch (error) {
+        return res.status(500).json({ message: "Server error.", error: error });
     }
 });
 
@@ -172,7 +172,25 @@ app.get("/get-posts/:id", async(req, res) => {
     } catch (error) {
         return res.status(500).json({ message: "Server issue", error: error });
     }
-})
+});
+
+// Retrieve posts with specific user id
+app.get("/get-posts/users/:user_id", verifyJWT, async(req, res) => {
+    const {user_id} = req.params;
+
+    try {
+        if (req.user.id && req.user.id === Number(user_id)) {
+            const search_query = `SELECT *, DATE_FORMAT(time_created, '%Y-%m-%d') as post_date, DATE_FORMAT(time_created, '%H:%i:%s') as post_time FROM posts WHERE user_id = ? AND privacy_mode = 1`;
+            const [posts] = await pool.query(search_query, [user_id]);
+
+            return res.status(200).json({ message: "User is authenticated and private posts retrieved.", posts: posts});
+        } else {
+            return res.status(404).json({ message: "User is unauthenticated. No posts to display. "});
+        }
+    } catch {
+        return res.status(500).json({ message: "Server issue." });
+    }
+});
 
 app.post("/create-post", async(req, res) => {
     const {title, content, image_url} = req.body;
@@ -209,7 +227,7 @@ app.delete("/remove-post/:id", async(req, res) => {
     }
 });
 
-{/* (TEST) SECTION 3: CONNECTION ROUTE TO EMOTIONS ANALYZING MODEL VIA PYTHON API */}
+{/* (REVISION) SECTION 3: CONNECTION ROUTE TO EMOTIONS ANALYZING MODEL VIA PYTHON API */}
 
 // JS server-side communication with Python script
 app.post("/api/emotion", async(req, res) => {

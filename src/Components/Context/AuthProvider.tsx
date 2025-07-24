@@ -45,10 +45,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         },
       });
 
+      console.log("Verification successful.");
+
       setAccessToken(token);
       setUser(response.data.user);
     } catch (error) {
-      console.error("Could not verify user.", error);
+      console.error("Verification failed. Use has been logged out.", error);
 
       setAccessToken(null);
       setUser(null);

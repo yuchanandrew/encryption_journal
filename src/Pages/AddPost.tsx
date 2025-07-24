@@ -11,6 +11,7 @@ const AddPost = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [toggle, setToggle] = useState(false);
 
   const handleAdd = async (e: React.FormEvent) => {
     // Handle on form change
@@ -87,6 +88,10 @@ const AddPost = () => {
             onTextChange={setContent}
             placeholder={"Write your thoughts..."}
           />
+          <label className="flex text-center justify-end">
+            Want an audience?
+          </label>
+          {/* <input type="button" */}
           {/* <label htmlFor="image_url">How about an image?</label>
           <input
             id="image_url"
