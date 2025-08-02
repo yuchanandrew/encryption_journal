@@ -42,17 +42,26 @@ const Navigation = () => {
   }, [open]);
 
   return (
-    <div className="relative bg-matcha py-4 shadow-lg">
+    <div className="relative bg-indigo-300 py-4 shadow-lg">
       <div className="flex flex-wrap gap-8 justify-center items-center">
-        <Link to="/" className="heading">
+        <Link to="/home" className="heading">
           Home
         </Link>
-        <Link
-          to="/create-post"
-          className="heading hover-primary shadow rounded-xl p-4 bg-indigo-300"
-        >
-          <LuPlus />
-        </Link>
+        {user ? (
+          <Link
+            to="/create-post"
+            className="heading hover-primary shadow rounded-xl p-4 bg-green-300"
+          >
+            <LuPlus />
+          </Link>
+        ) : (
+          <Link
+            to="/sign-in"
+            className="heading hover-primary shadow rounded-xl p-4 bg-green-300"
+          >
+            <LuPlus />
+          </Link>
+        )}
         <Link to="/collection" className="heading">
           Collection
         </Link>

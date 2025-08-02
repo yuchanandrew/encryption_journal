@@ -4,6 +4,7 @@ import axios from "axios";
 
 type PostType = {
   id: number;
+  user_id: number;
   title: string;
   content: string;
   image_url: string;
@@ -67,7 +68,7 @@ const Collection = () => {
   }, []);
 
   return (
-    <div className="outer-page-div">
+    <div className="outer-page-div mb-20">
       <h2 className="page-heading flex">Let's look at your posts 🤯</h2>
       {/* Map the dates: split() creates mutable copy of dates, reverse() reverses the copied array */}
       {dates
@@ -91,6 +92,7 @@ const Collection = () => {
                       key={post.id}
                       id={post.id}
                       title={post.title}
+                      user_id={post.user_id}
                       content={post.content}
                       image_url={post.image_url}
                       date={post.post_date}

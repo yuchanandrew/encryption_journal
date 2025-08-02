@@ -1,10 +1,11 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Post from "../Components/Post";
 
 type PostType = {
   id: number;
+  user_id: number;
   title: string;
   content: string;
   image_url: string;
@@ -47,6 +48,7 @@ const PostPage = () => {
           <Post
             id={post.id}
             title={post.title}
+            user_id={post.user_id}
             content={post.content}
             image_url={post.image_url}
             date={post.post_date}

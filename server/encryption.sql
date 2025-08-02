@@ -19,7 +19,7 @@ CREATE TABLE posts (
     image_url TEXT DEFAULT NULL,
     time_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     emotion VARCHAR(50) DEFAULT NULL,
-    privacy_mode BOOLEAN DEFAULT TRUE,
+    public_mode BOOLEAN DEFAULT FALSE,
     title TEXT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

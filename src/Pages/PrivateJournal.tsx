@@ -6,6 +6,7 @@ import Post from "../Components/Post";
 // Borrowed assets from Collection.tsx to replicate journal feature
 type PostType = {
   id: number;
+  user_id: number;
   title: string;
   content: string;
   image_url: string;
@@ -123,6 +124,7 @@ const PrivateJournal = () => {
                           key={post.id}
                           id={post.id}
                           title={post.title}
+                          user_id={post.user_id}
                           content={post.content}
                           image_url={post.image_url}
                           date={post.post_date}

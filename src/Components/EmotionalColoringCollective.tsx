@@ -1,8 +1,7 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import AuthContext from "./Context/AuthProvider";
 
-const EmotionalColoring = ({ children }: any) => {
+const EmotionalColoringCollective = ({ children }: any) => {
   const [names, setNames] = useState<string[]>([]);
   const [colors, setColors] = useState<string[]>([]);
 
@@ -42,14 +41,6 @@ const EmotionalColoring = ({ children }: any) => {
     neutral: grayColor,
   };
 
-  const auth = useContext(AuthContext);
-
-  if (!auth) {
-    throw new Error("AuthContext must be used within AuthProvider.");
-  }
-
-  const { user } = auth;
-
   const now = new Date();
   const nowToTimestamp = new Intl.DateTimeFormat("en-CA").format(now);
 
@@ -60,11 +51,10 @@ const EmotionalColoring = ({ children }: any) => {
   const fetchTopEmotions = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:3000/top-emotions-of-the-day",
+        "http://localhost:3000/top-emotions-of-the-day-collective",
         {
           params: {
             day: nowToTimestamp,
-            user_id: user?.id,
           },
         }
       );
@@ -91,12 +81,12 @@ const EmotionalColoring = ({ children }: any) => {
 
   useEffect(() => {
     fetchTopEmotions();
-  }, [nowToTimestamp, user]);
+  }, [nowToTimestamp]);
 
   return (
     <div
       style={gradientStyle}
-      className="flex flex-col bg-blue-gray rounded shadow w-full px-4 py-8 justify-center items-center space-y-6"
+      className="flex flex-col bg-blue-gray border-1 border-gray-600 rounded shadow w-full px-4 py-8 justify-center items-center space-y-6"
     >
       <h2 className="flex heading">Emotions of the Day</h2>
       {children}
@@ -116,4 +106,4 @@ const EmotionalColoring = ({ children }: any) => {
   );
 };
 
-export default EmotionalColoring;
+export default EmotionalColoringCollective;

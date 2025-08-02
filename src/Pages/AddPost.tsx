@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import AutoResizeText from "../Components/AutoResizeText";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../Components/Context/AuthProvider";
 
 axios.defaults.withCredentials = true;
 
@@ -13,6 +14,16 @@ const AddPost = () => {
   const [imageUrl, setImageUrl] = useState("");
   const [toggle, setToggle] = useState(false);
 
+  const auth = useContext(AuthContext);
+
+  if (!auth) {
+    throw new Error("AuthContext must be used within AuthProvider.");
+  }
+
+  const { user } = auth;
+
+  // TODO: Add an alert to let user know that they must be logged in to make a post
+
   const handleAdd = async (e: React.FormEvent) => {
     // Handle on form change
     e.preventDefault();
@@ -23,8 +34,10 @@ const AddPost = () => {
         {
           // Post title, content, and image to route
           title,
+          user_id: user?.id,
           content,
           image_url: imageUrl,
+          public_mode: toggle,
         }
       );
 
@@ -57,6 +70,7 @@ const AddPost = () => {
       setTitle("");
       setContent("");
       setImageUrl("");
+      setToggle(false);
     } catch (error) {
       console.error("Failed to create post:", error);
     }
@@ -65,7 +79,7 @@ const AddPost = () => {
   return (
     <div className="outer-page-div">
       <h2 className="flex page-heading text-center">What's on your mind? 🫥</h2>
-      <div className="flex flex-col rounded-xl justify-center w-full max-w-xl items-center py-6 bg-gray-200 shadow-lg">
+      <div className="flex flex-col rounded-xl justify-center w-full max-w-xl items-center py-6 mb-20 bg-gray-200 shadow-lg">
         <form
           onSubmit={handleAdd}
           className="flex flex-col justify-center items-center space-y-6 w-10/12"
@@ -88,10 +102,19 @@ const AddPost = () => {
             onTextChange={setContent}
             placeholder={"Write your thoughts..."}
           />
-          <label className="flex text-center justify-end">
-            Want an audience?
+          <label>Want an audience?</label>
+          <input
+            id="privacy"
+            type="checkbox"
+            className="hidden"
+            onChange={() => setToggle(!toggle)}
+          />
+          <label
+            htmlFor="privacy"
+            className={`toggle-btn ${toggle ? "toggled" : ""}`}
+          >
+            <div className="thumb"></div>
           </label>
-          {/* <input type="button" */}
           {/* <label htmlFor="image_url">How about an image?</label>
           <input
             id="image_url"

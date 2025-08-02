@@ -149,11 +149,10 @@ app.post("/sign-out", async(req, res) => {
 {/* (TEST) SECTION 2: RETRIEVE POSTS & CRUD MODAL FOR POSTS */}
 
 app.get("/get-posts", async(req, res) => {
-    const search_query = `SELECT *, DATE_FORMAT(time_created, '%Y-%m-%d') as post_date, DATE_FORMAT(time_created, '%H:%i:%s') as post_time FROM post_test`;
+    const search_query = `SELECT *, DATE_FORMAT(time_created, '%Y-%m-%d') as post_date, DATE_FORMAT(time_created, '%H:%i:%s') as post_time FROM posts WHERE public_mode = 1`;
     const [result] = await pool.query(search_query);
 
     try {
-        console.log("result:", result);
         return res.status(200).json({ message: "Posts retrieved successfully", posts: result});
     } catch (error) {
         return res.status(500).json({ message: "Server error.", error: error });
@@ -161,11 +160,16 @@ app.get("/get-posts", async(req, res) => {
 });
 
 // Retrieve a post with specific id
+
+// PROBLEM: Posts with public mode ON should be accessed by every user, whereas posts with public mode OFF
+// should only be accessed by the authorized user
+
+// PARAMS (FROM TABLE posts): id, user_id
 app.get("/get-posts/:id", async(req, res) => {
     const {id} = req.params;
 
     try {
-        const search_query = `SELECT *, DATE_FORMAT(time_created, '%Y-%m-%d') as post_date, DATE_FORMAT(time_created, '%H:%i:%s') as post_time FROM post_test WHERE id = ?`;
+        const search_query = `SELECT *, DATE_FORMAT(time_created, '%Y-%m-%d') as post_date, DATE_FORMAT(time_created, '%H:%i:%s') as post_time FROM posts WHERE id = ?`;
         const [result] = await pool.query(search_query, [id]);
 
         return res.status(200).json({ message: `Successfully retrieved post with id = ${id}!`, post: result[0]});
@@ -174,13 +178,13 @@ app.get("/get-posts/:id", async(req, res) => {
     }
 });
 
-// Retrieve posts with specific user id
+// Retrieve posts with specific user id (private)
 app.get("/get-posts/users/:user_id", verifyJWT, async(req, res) => {
     const {user_id} = req.params;
 
     try {
         if (req.user.id && req.user.id === Number(user_id)) {
-            const search_query = `SELECT *, DATE_FORMAT(time_created, '%Y-%m-%d') as post_date, DATE_FORMAT(time_created, '%H:%i:%s') as post_time FROM posts WHERE user_id = ? AND privacy_mode = 1`;
+            const search_query = `SELECT *, DATE_FORMAT(time_created, '%Y-%m-%d') as post_date, DATE_FORMAT(time_created, '%H:%i:%s') as post_time FROM posts WHERE user_id = ? AND public_mode = 0`;
             const [posts] = await pool.query(search_query, [user_id]);
 
             return res.status(200).json({ message: "User is authenticated and private posts retrieved.", posts: posts});
@@ -192,16 +196,31 @@ app.get("/get-posts/users/:user_id", verifyJWT, async(req, res) => {
     }
 });
 
-app.post("/create-post", async(req, res) => {
-    const {title, content, image_url} = req.body;
+// Retrieve all of user's posts (public)
+app.get("/get-public-posts/:user_id", async(req, res) => {
+    const {user_id} = req.params;
 
     try {
-        const insert_query = `INSERT INTO post_test(title, content, image_url) VALUES (?, ?, ?)`;
-        const [insert_result] = await pool.query(insert_query, [title, content, image_url]);
+        const search_query = `SELECT *, DATE_FORMAT(time_created, '%Y-%m-%d') as post_date, DATE_FORMAT(time_created, '%H:%i:%s') as post_time FROM posts WHERE user_id = ? AND public_mode = 1`;
+        const [posts] = await pool.query(search_query, [user_id]);
+
+        return res.status(200).json({ message: "User is authenticated and private posts retrieved.", posts: posts});
+    } catch (error) {
+        return res.status(500).json({ message: "Server issue.", error: error });
+    }
+});
+
+// Update 7/24: Added in public_mode toggle functionality into AddPost.tsx component
+app.post("/create-post", async(req, res) => {
+    const {title, user_id, content, image_url, public_mode} = req.body;
+
+    try {
+        const insert_query = `INSERT INTO posts(title, user_id, content, image_url, public_mode) VALUES (?, ?, ?, ?, ?)`;
+        const [insert_result] = await pool.query(insert_query, [title, user_id, content, image_url, public_mode]);
 
         const newId = insert_result.insertId;
 
-        const search_query = `SELECT * FROM post_test WHERE id = ?`;
+        const search_query = `SELECT * FROM posts WHERE id = ?`;
         const [search_result] = await pool.query(search_query, [newId]);
 
         const newPost = search_result[0];
@@ -217,7 +236,7 @@ app.delete("/remove-post/:id", async(req, res) => {
     const {id} = req.params;
 
     try {
-        const delete_query = `DELETE FROM post_test WHERE id = ?`;
+        const delete_query = `DELETE FROM posts WHERE id = ?`;
         await pool.query(delete_query, [id]);
 
         return res.status(200).json({ message: "Post removed successfully" });
@@ -249,11 +268,27 @@ app.post("/api/emotion", async(req, res) => {
 });
 
 // Route to retrieve all the emotions posted in the day looked up in query
+
+// TODO: Implement a model where the emotions are based on the collective group
+// TODO: Create another route that analyzes emotions of individual users based on both their private AND public posts
 app.get("/emotions-of-the-day", async(req, res) => {
+    const { day, user_id } = req.query;
+
+    try{
+        const search_query = `SELECT emotion FROM posts WHERE DATE_FORMAT(time_created, '%Y-%m-%d') = ? AND user_id = ?`;
+        const [result] = await pool.query(search_query, [day, user_id]);
+
+        return res.status(200).json({ message: `Successfully retrieved ${day} emotions.`, emotions: result });
+    } catch (error) {
+        return res.status(500).json({ message: "Server issue" });
+    }
+});
+
+app.get("/emotions-of-the-day-collective", async(req, res) => {
     const { day } = req.query;
 
     try{
-        const search_query = `SELECT emotion FROM post_test WHERE DATE_FORMAT(time_created, '%Y-%m-%d') = ?`;
+        const search_query = `SELECT emotion FROM posts WHERE DATE_FORMAT(time_created, '%Y-%m-%d') = ?`;
         const [result] = await pool.query(search_query, [day]);
 
         return res.status(200).json({ message: `Successfully retrieved ${day} emotions.`, emotions: result });
@@ -264,12 +299,31 @@ app.get("/emotions-of-the-day", async(req, res) => {
 
 // Route to get all 3 of the most relevant emotions of the day
 app.get("/top-emotions-of-the-day", async(req, res) => {
+    const { day, user_id } = req.query;
+
+    try {
+        const search_query = `
+        SELECT emotion, COUNT(*) as count 
+        FROM posts WHERE DATE_FORMAT(time_created, '%Y-%m-%d') = ? AND user_id = ? 
+        GROUP BY emotion
+        ORDER BY count DESC
+        LIMIT 3`;
+        const [result] = await pool.query(search_query, [day, user_id]);
+
+        res.status(200).json({ message: "Successfully retrieved most frequent emotions.", emotions: result, user_id: user_id });
+    } catch (error) {
+        res.status(500).json({ message: "Server issue" });
+    }
+});
+
+// Getting the top emotions of the day as a collective
+app.get("/top-emotions-of-the-day-collective", async(req, res) => {
     const { day } = req.query;
 
     try {
         const search_query = `
         SELECT emotion, COUNT(*) as count 
-        FROM POST_TEST WHERE DATE_FORMAT(time_created, '%Y-%m-%d') = ? 
+        FROM posts WHERE DATE_FORMAT(time_created, '%Y-%m-%d') = ? 
         GROUP BY emotion
         ORDER BY count DESC
         LIMIT 3`;
@@ -282,11 +336,13 @@ app.get("/top-emotions-of-the-day", async(req, res) => {
 });
 
 // TODO: Retrieve each post's emotion from database compared to having Python re-compute sentiment analysis
+
+// UPDATE 7/24: Replaced all instances of post_test with posts
 app.get("/get-emotion/:id", async(req, res) => {
     const {id} = req.params;
     
     try {
-        const search_query = `SELECT * FROM post_test WHERE id = ?`;
+        const search_query = `SELECT * FROM posts WHERE id = ?`;
         const [result] = await pool.query(search_query, [id]);
 
         const resultEmotion = result[0].emotion;
@@ -302,7 +358,7 @@ app.post("/add-emotion", async(req, res) => {
     const { id, emotion } = req.body;
 
     try {
-        const update_query = `UPDATE post_test SET emotion = ? WHERE id = ?`;
+        const update_query = `UPDATE posts SET emotion = ? WHERE id = ?`;
         await pool.query(update_query, [emotion, id]);
 
         return res.status(200).json({ message: "Successfully updated emotions." });
@@ -316,12 +372,27 @@ app.get("/api/emotion/:emotion", async(req, res) => {
     const { emotion } = req.params;
 
     try {
-        const get_query = `SELECT *, DATE_FORMAT(time_created, '%Y-%m-%d') as post_date, DATE_FORMAT(time_created, '%H:%i:%s') as post_time FROM post_test where emotion = ?`;
+        const get_query = `SELECT *, DATE_FORMAT(time_created, '%Y-%m-%d') as post_date, DATE_FORMAT(time_created, '%H:%i:%s') as post_time FROM posts where emotion = ? AND public_mode = 1`;
         const [result] = await pool.query(get_query, [emotion]);
 
         return res.status(200).json({ message: `Details for post_test with emotion = ${emotion} retrieved.`, posts: result});
     } catch (error) {
         return res.status(500).json({ message: "Server issue" });
+    }
+});
+
+{/* SECTION 4: USER RETRIEVAL AND ROUTES REGARDING USERS TABLE */}
+
+app.get("/get-user/:id", async(req, res) => {
+    const {id} = req.params;
+    
+    try {
+        const search_query = `SELECT * FROM users WHERE id = ?`;
+        const result = await pool.query(search_query, [id]);
+
+        return res.status(200).json({ message: "User retrieved.", user: result[0]});
+    } catch (error) {
+        return res.status(500).json({ message: "Something went wrong while trying to retrieve user.", error: error});
     }
 });
 

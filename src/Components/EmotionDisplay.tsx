@@ -86,9 +86,12 @@ const EmotionDisplay = ({ id }: EmotionDisplayProps) => {
 
   return (
     <div
-      className={`${color} text-sm hover:underline shadow py-2 px-4 rounded-3xl`}
+      className={`${color} text-sm max-w-50 max-h-10 whitespace-nowrap truncate hover:underline shadow py-2 px-4 rounded-3xl`}
     >
-      <Link to={`/collection/emotions/${emotion}`}>
+      <Link
+        to={`/collection/emotions/${emotion}`}
+        className="overflow-x-hidden"
+      >
         #{emotion} {emoji}
       </Link>
     </div>

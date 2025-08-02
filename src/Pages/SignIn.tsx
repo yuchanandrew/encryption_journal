@@ -35,14 +35,14 @@ const SignIn = () => {
       setPassword("");
 
       // TODO: Eventually replace redirect to user's profile.
-      navigate("/");
+      navigate("/home");
     } catch (error) {
       console.error("Something went wrong while registering user.", error);
     }
   };
   return (
-    <div className="flex flex-col justify-center items-center py-6 space-y-6">
-      <h2 className="flex page-heading">Register</h2>
+    <div className="flex flex-col justify-center items-center mt-12 mb-20 space-y-6">
+      <h2 className="flex page-heading">Sign In</h2>
       <div className="w-full max-w-lg bg-gray-200 rounded">
         <form onSubmit={handleRegister} className="p-4">
           <div className="mb-4">

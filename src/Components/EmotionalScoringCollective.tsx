@@ -1,18 +1,7 @@
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
-import AuthContext from "./Context/AuthProvider";
+import { useEffect, useState } from "react";
 
-const EmotionalScoring = () => {
-  const auth = useContext(AuthContext);
-
-  if (!auth) {
-    throw new Error("AuthContext must be used within AuthProvider.");
-  }
-
-  const { user } = auth;
-
-  console.log("User:", user?.username);
-
+const EmotionalScoringCollective = () => {
   const emotionScore: Record<string, number> = {
     anger: -1,
     annoyance: -1,
@@ -56,8 +45,6 @@ const EmotionalScoring = () => {
   const [totalScore, setTotalScore] = useState(0);
 
   const now = new Date();
-
-  console.log("Now:", now);
   const nowToTimestamp = new Intl.DateTimeFormat("en-CA").format(now);
   // const nowToTimestamp = now.toISOString().slice(0, 10);
 
@@ -65,23 +52,14 @@ const EmotionalScoring = () => {
 
   const fetchDayEmotions = async () => {
     try {
-      console.log(
-        "Fetching with user id:",
-        user?.id,
-        "and with timestamp:",
-        nowToTimestamp
-      );
       const response = await axios.get(
-        "http://localhost:3000/emotions-of-the-day",
+        "http://localhost:3000/emotions-of-the-day-collective",
         {
           params: {
             day: nowToTimestamp,
-            user_id: user?.id,
           },
         }
       );
-
-      // console.log("User_id:", response.data.user_id);
 
       const retrievedEmotions = response.data.emotions;
 
@@ -106,11 +84,8 @@ const EmotionalScoring = () => {
   };
 
   useEffect(() => {
-    if (user?.id !== null) {
-      fetchDayEmotions();
-      console.log("Event triggered with user id:", user?.id);
-    }
-  }, [nowToTimestamp, user?.id]);
+    fetchDayEmotions();
+  }, [nowToTimestamp]);
 
   return (
     <div className="flex flex-col emotion-analysis-heading">
@@ -119,4 +94,4 @@ const EmotionalScoring = () => {
   );
 };
 
-export default EmotionalScoring;
+export default EmotionalScoringCollective;

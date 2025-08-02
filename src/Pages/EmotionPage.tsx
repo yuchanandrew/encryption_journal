@@ -5,6 +5,7 @@ import Post from "../Components/Post";
 
 type PostType = {
   id: number;
+  user_id: number;
   title: string;
   content: string;
   image_url: string;
@@ -52,6 +53,7 @@ const EmotionPage = () => {
           <Post
             key={post.id}
             id={post.id}
+            user_id={post.user_id}
             title={post.title}
             content={post.content}
             image_url={post.image_url}

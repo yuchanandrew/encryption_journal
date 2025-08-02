@@ -7,7 +7,7 @@ const SignOutPage = () => {
         You have been signed-out successfully!
       </h2>
       <Link
-        to="/"
+        to="/home"
         className="flex hover:underline text-sky-300 hover:text-sky-400"
       >
         Back home

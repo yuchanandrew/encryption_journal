@@ -13,7 +13,10 @@ import SignIn from "./Pages/SignIn";
 import SignOutPage from "./Pages/SignOutPage";
 import Profile from "./Pages/Profile";
 import PrivateJournal from "./Pages/PrivateJournal";
-import Test from "./Pages/Test";
+import UserPage from "./Pages/UserPage";
+import HeroPage from "./Pages/HeroPage";
+import { useContext } from "react";
+import AuthContext from "./Components/Context/AuthProvider";
 
 axios.defaults.withCredentials = true;
 
@@ -23,7 +26,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           {/* TODO: Add more pages here when made */}
-          <Route path="/" element={<Home />} />
+          {/* <Route path="/" element={<HeroPage />} /> */}
+          <Route path="/home" element={<Home />} />
           <Route path="/create-post" element={<AddPost />} />
 
           {/* Routes related to user creation/deletion/retrieval */}
@@ -43,8 +47,8 @@ function App() {
             element={<EmotionPage />}
           />
 
-          {/* Testing route for button */}
-          <Route path="/test" element={<Test />} />
+          {/* Routes related to viewing other users */}
+          <Route path="/users/:user_id" element={<UserPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
