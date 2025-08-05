@@ -55,6 +55,7 @@ const HeroPage = () => {
           </div>
           <div className="flex justify-center items-center">
             {/* Add an animation here with CSS maybe (smileys change and background changes to match the expression) */}
+            {/* UPDATE (8/5): Add a typewriting animation that types "I am feeling [blank]" and then fade revealing a new sentence. Add 5 or so animations. */}
             <h2 className="flex text-9xl">😀</h2>
           </div>
           <button

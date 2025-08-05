@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import EmotionalScoring from "../Components/EmotionalScoring";
 import EmotionalColoring from "../Components/EmotionalColoring";
 import EmotionalColoringCollective from "../Components/EmotionalColoringCollective";

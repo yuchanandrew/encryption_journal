@@ -112,12 +112,28 @@ body {
   }
 
   .toggle-btn-display.toggled {
-    @apply bg-green-600;
+    background: linear-gradient(45deg, var(--color-green-200), var(--color-green-400), var(--color-green-600));
   }
   
   .toggle-btn-display.toggled .big-thumb {
     @apply shadow-md border-1 border-gray-500;
     transform: translateX(10.75vw);
+  }
+
+  .about-icon {
+    @apply text-jade transition-all transform hover:text-green-800 hover:scale-105 hover:-translate-y-1;
+  }
+}
+
+@layer components {
+  .name-underline {
+    position: relative;
+    right: 5px;
+    width: 100px;
+    height: 5px;
+    background: linear-gradient(45deg, var(--color-green-300), var(--color-green-700));
+    padding: auto;
+    border-radius: 99px;
   }
 }
 
@@ -161,7 +177,6 @@ body {
   position: absolute;
   top: -6px;
   left: -6px;
-  background-size: 600%;
   z-index: -1;
   width: calc(100% + 10px);
   height: calc(100% + 10px);
@@ -179,4 +194,44 @@ body {
   100% {
     background-position: 120% 0;
   }
+}
+
+.photo-wrapper {
+  @apply relative w-full max-w-[50vw] max-h-[50vw] md:max-w-[15vw] md:max-h-[15vw] aspect-square flex items-center justify-center;
+}
+
+.photo-wrapper::before {
+  content: "";
+  position: absolute;
+  border-radius: 9999px;
+  background: linear-gradient(to right, var(--color-green-500), var(--color-blue-500), var(--color-purple-500), var(--color-blue-500), var(--color-green-500));
+  background-size: 600% 600%;
+  background-repeat: repeat;
+  width: calc(100% + 10px);
+  height: calc(100% + 10px);
+  filter: blur(8px);
+  animation: glowing-profile 5s linear infinite;
+  transition: opacity .3s ease-in-out;
+  opacity: 1;
+}
+
+@keyframes glowing-profile {
+  0% {
+    background-position: 0 0;
+    opacity: 0.3;
+    filter: brightness(1.2), blur(4px);
+  }
+  50% {
+    opacity: 1;
+    filter: brightness(2), blur(8px);
+  }
+  100% {
+    background-position: 100% 0;
+    opacity: 0.3;
+    filter: brightness(1.2), blur(4px);
+  }
+}
+
+.about-photo {
+  @apply flex w-full h-full object-cover rounded-full relative z-10;
 }

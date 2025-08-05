@@ -4,9 +4,9 @@ import Footer from "./Footer";
 
 const Layout = () => {
   return (
-    <div>
+    <div className="flex flex-col">
       <Navigation />
-      <div>
+      <div className="flex-1">
         <Outlet />
         <div className="z-10">
           <Footer />

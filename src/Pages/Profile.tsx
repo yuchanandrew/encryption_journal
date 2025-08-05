@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 const Profile = () => {
   const auth = useContext(AuthContext);
   const [image, setImage] = useState<string | null>(null);
+  const [bio, setBio] = useState<string | null>(null);
 
   const [edit, setEdit] = useState(false);
 
@@ -22,6 +23,12 @@ const Profile = () => {
   }
 
   const { user, updateUser } = auth;
+
+  // TODO: Fix the data that is parsed into UserType. For some reason, displaying user object only gives username, email, user_id...
+  useEffect(() => {
+    setImage(user?.profile_img_url ?? null);
+    setBio(user?.bio ?? null);
+  }, [edit]);
 
   console.log("User:", user);
 
@@ -58,7 +65,7 @@ const Profile = () => {
   }, [user]);
 
   return (
-    <div className="flex flex-col outer-page-div">
+    <div className="flex flex-col outer-page-div mb-12">
       {user === null ? (
         <h2 className="flex heading">
           Error 404: No user logged in. Please sign in.
@@ -67,7 +74,7 @@ const Profile = () => {
         <>
           <h2 className="flex page-heading">Profile</h2>
           {!edit ? (
-            <div className="flex flex-col w-8/10 rounded-xl items-center justify-center bg-gray-50">
+            <div className="flex flex-col w-8/10 rounded-xl items-center justify-center bg-gray-50 border-3 border-gray-300 shadow-xl">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full px-3 py-4">
                 <div className="flex flex-col justify-center space-y-6">
                   <h2 className="flex">User: {user?.username}</h2>

@@ -81,7 +81,7 @@ const UserPage = () => {
     fetchPosts();
   }, [user_id]);
   return (
-    <div className="flex flex-col outer-page-div">
+    <div className="flex flex-col outer-page-div mb-12">
       <h2 className="flex page-heading">{user?.username}'s Page</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 py-3 px-2 justify-center items-start w-full">
         <div className="flex flex-col md:sticky top-6 h-fit col-span-1 rounded-xl py-3 px-6 space-y-6 bg-gray-50 outline-1 outline-gray-400 shadow-md">
