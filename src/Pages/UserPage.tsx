@@ -112,6 +112,7 @@ const UserPage = () => {
               image_url={post.image_url}
               date={post.post_date}
               time={post.post_time}
+              clamp_mode={true}
               onDelete={handleDelete}
             />
           ))}

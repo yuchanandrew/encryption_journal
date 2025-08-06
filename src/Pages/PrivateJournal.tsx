@@ -94,7 +94,7 @@ const PrivateJournal = () => {
   };
 
   return (
-    <div className="flex flex-col outer-page-div">
+    <div className="flex flex-col outer-page-div mb-12">
       {user === null ? (
         <h2 className="flex heading">
           Error 404: No user logged in. Please sign in.
@@ -129,6 +129,7 @@ const PrivateJournal = () => {
                           image_url={post.image_url}
                           date={post.post_date}
                           time={post.post_time}
+                          clamp_mode={true}
                           onDelete={handleDelete}
                         />
                       ))}

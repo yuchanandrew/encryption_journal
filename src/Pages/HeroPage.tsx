@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import ToggleButtonDisplay from "./ToggleButtonDisplay";
 import axios from "axios";
 import PostHero from "../Components/PostHero";
+import { LuCircleArrowRight } from "react-icons/lu";
 
 type PostType = {
   id: number;
@@ -57,12 +58,16 @@ const HeroPage = () => {
             {/* Add an animation here with CSS maybe (smileys change and background changes to match the expression) */}
             {/* UPDATE (8/5): Add a typewriting animation that types "I am feeling [blank]" and then fade revealing a new sentence. Add 5 or so animations. */}
             <h2 className="flex text-9xl">😀</h2>
+            {/* <h1 className="typewriter text-9xl">Today, I am feeling happy!</h1> */}
           </div>
           <button
             onClick={() => navigate("/register")}
-            className="hover-primary sign-up-button lg:max-h-[8vh] md:max-h-[6vh]"
+            className="flex gap-3 justify-center items-center hover-primary sign-up-button lg:max-h-[8vh] md:max-h-[6vh]"
           >
-            Sign up
+            <h2 className="flex text-xl">Sign up</h2>
+            <div className="flex justify-center items-center animate-right-bounce mt-1">
+              <LuCircleArrowRight size={20} />
+            </div>
           </button>
         </div>
       </div>
@@ -147,7 +152,7 @@ const HeroPage = () => {
           See what others have posted
         </h2>
         <div className="overflow-x-hidden [mask-image:_linear-gradient(to_right,_transparent_0,_black_5vw,_calc(100%-5vw),_transparent_100%)] max-w-full">
-          <div className="inline-flex animate-infinite-scroll whitespace-nowrap py-4 mt-8">
+          <div className="inline-flex animate-infinite-scroll whitespace-nowrap py-4 mt-8 mb-12">
             {cards.slice(0, 7).map((card: PostType) => (
               <div key={card.id} className="px-2">
                 <PostHero
@@ -177,7 +182,7 @@ const HeroPage = () => {
         </h2>
         <button
           onClick={() => navigate("/collection")}
-          className="hover-primary border-1 border-sky-400 mt-8 py-3 px-12 rounded-xl bg-sky-300"
+          className="hover-primary border-2 border-sky-400 mt-8 py-3 px-12 rounded-xl bg-sky-300"
         >
           Collection
         </button>

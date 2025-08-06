@@ -69,7 +69,7 @@ const Collection = () => {
 
   return (
     <div className="outer-page-div mb-20">
-      <h2 className="page-heading flex">Let's look at your posts 🤯</h2>
+      <h2 className="page-heading flex">What others are saying 🤯</h2>
       {/* Map the dates: split() creates mutable copy of dates, reverse() reverses the copied array */}
       {dates
         .slice()
@@ -97,6 +97,7 @@ const Collection = () => {
                       image_url={post.image_url}
                       date={post.post_date}
                       time={post.post_time}
+                      clamp_mode={true}
                       onDelete={handleDelete}
                     />
                   ))}

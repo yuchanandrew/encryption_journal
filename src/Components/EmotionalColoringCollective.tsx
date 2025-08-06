@@ -86,7 +86,7 @@ const EmotionalColoringCollective = ({ children }: any) => {
   return (
     <div
       style={gradientStyle}
-      className="flex flex-col bg-blue-gray border-1 border-gray-600 rounded shadow w-full px-4 py-8 justify-center items-center space-y-6"
+      className="flex flex-col bg-indigo-300 border-1 border-gray-600 rounded shadow w-full px-4 py-8 justify-center items-center space-y-6"
     >
       <h2 className="flex heading">Emotions of the Day</h2>
       {children}

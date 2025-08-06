@@ -50,14 +50,14 @@ const Navigation = () => {
         {user ? (
           <Link
             to="/create-post"
-            className="heading hover-primary shadow rounded-xl p-4 bg-green-300"
+            className="heading hover-primary shadow-lg rounded-xl p-4 bg-sky-300 border-2 border-sky-400"
           >
             <LuPlus />
           </Link>
         ) : (
           <Link
             to="/sign-in"
-            className="heading hover-primary shadow rounded-xl p-4 bg-green-300"
+            className="heading hover-primary shadow-lg rounded-xl p-4 bg-sky-300 border-2 border-sky-400"
           >
             <LuPlus />
           </Link>
@@ -69,9 +69,12 @@ const Navigation = () => {
       <div className="absolute right-5 top-5 z-50 items-center">
         {user ? (
           <div className="flex flex-col space-y-2">
-            <div className="flex flex-row items-center bg-gray-200 px-3 gap-4 rounded-3xl">
-              <h2>Welcome, {user.username}.</h2>
-              <button ref={profile} className="hover-primary">
+            <div className="flex flex-row items-center bg-gray-200 px-3 gap-2 rounded-3xl">
+              <h2>@{user.username}</h2>
+              <button
+                ref={profile}
+                className="cursor-pointer transition-all transform scale-105"
+              >
                 <IoPersonCircle size={50} />
               </button>
               {/* TODO: Re-format ProfilePop.tsx... */}
@@ -92,13 +95,13 @@ const Navigation = () => {
           <div className="flex flex-row gap-2 items-center justify-center rounded-2xl">
             <Link
               to="/register"
-              className="hover:underline hover:bg-gray-300 bg-gray-200 rounded-xl p-3 shadow"
+              className="hover:bg-gray-300 bg-gray-200 border-2 border-gray-300 rounded-xl p-3 shadow-xl"
             >
               Register
             </Link>
             <Link
               to="/sign-in"
-              className="hover:underline hover:bg-sky-400 bg-sky-300 rounded-xl p-3 shadow"
+              className="hover:bg-sky-400 bg-sky-300 border-2 border-sky-400 rounded-xl p-3 shadow-xl"
             >
               Sign In
             </Link>

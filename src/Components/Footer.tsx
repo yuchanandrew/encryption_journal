@@ -3,7 +3,7 @@ import { FaGithub, FaLinkedin, FaInstagram } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <div className="w-full h-auto py-12 bg-ultra-violet min-h-[75vh]">
+    <div className="w-full h-auto py-12 bg-ultra-violet">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-12 px-8">
         <div className="footer-column-div">
           <h2 className="footer-column-header">Pages</h2>

@@ -46,7 +46,7 @@ const EmotionPage = () => {
     fetchTaggedPosts();
   }, [emotion]);
   return (
-    <div className="outer-page-div">
+    <div className="outer-page-div mb-12">
       <h2 className="page-heading flex">#{emotion}</h2>
       <div className="px-4 w-full grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
         {listOfPosts.map((post: PostType) => (
@@ -59,6 +59,7 @@ const EmotionPage = () => {
             image_url={post.image_url}
             date={post.post_date}
             time={post.post_time}
+            clamp_mode={true}
             onDelete={handleDelete}
           />
         ))}

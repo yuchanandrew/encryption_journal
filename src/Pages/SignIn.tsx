@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useContext, useState } from "react";
 import { FaGoogle } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../Components/Context/AuthProvider";
 
 const SignIn = () => {
@@ -70,15 +70,21 @@ const SignIn = () => {
             />
           </div>
           <div className="flex justify-center">
-            <button className="flex hover-primary mt-8 font-semibold bg-matcha w-1/2 rounded py-4 justify-center items-center">
+            <button className="flex hover-primary mt-8 font-semibold bg-green-300 border-2 border-green-400 w-1/2 rounded-xl shadow-xl py-4 justify-center items-center">
               Sign In
             </button>
           </div>
-          <div className="flex justify-center py-3 mt-4">
-            <p>- Or sign in through -</p>
+          <div className="w-full border-2 border-gray-300 rounded-xl mt-12"></div>
+          <div className="flex mt-4">
+            <p>Don't already have an account with us?</p>
           </div>
-          <div className="flex justify-center mt-4 mb-4">
-            <FaGoogle size={25} />
+          <div className="flex mb-4 mt-2">
+            <Link
+              to="/register"
+              className="underline text-sky-400 hover:text-sky-500"
+            >
+              Register
+            </Link>
           </div>
         </form>
       </div>

@@ -124,7 +124,7 @@ const AddPost = () => {
             onChange={(e) => setImageUrl(e.target.value)}
             placeholder="Add an image"
           /> */}
-          <button className="hover-primary flex shadow-lg flex-col p-4 w-10/12 rounded-xl font-bold bg-matcha">
+          <button className="hover-primary flex shadow-lg flex-col p-4 w-10/12 rounded-xl font-bold bg-green-300 border-2 border-green-500">
             Submit
           </button>
           {/* {content && (

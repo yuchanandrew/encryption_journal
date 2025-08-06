@@ -169,6 +169,14 @@ app.get("/get-posts/:id", async(req, res) => {
     const {id} = req.params;
 
     try {
+    //     // Security Check 1: If private mode ON, check to make sure user_id of post data is authenticated
+    //     const user_query = `SELECT user_id FROM posts WHERE id = ? AND public_mode = 0`;
+    //     const [user_id_result] = await pool.query(user_query, [id]);
+
+    //     if (user_id_result !== Number(req.user.id)) {
+    //         return res.status(404).json({ message: "User is unauthenticated to view this content." });
+    //     }
+
         const search_query = `SELECT *, DATE_FORMAT(time_created, '%Y-%m-%d') as post_date, DATE_FORMAT(time_created, '%H:%i:%s') as post_time FROM posts WHERE id = ?`;
         const [result] = await pool.query(search_query, [id]);
 

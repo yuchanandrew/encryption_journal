@@ -19,14 +19,14 @@ const Home = () => {
     <HeroPage />
   ) : (
     <div className="outer-page-div">
-      <h2 className="flex page-heading">Welcome Home 👽</h2>
+      <h2 className="flex page-heading">Welcome, {user?.username}</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full px-4">
         <EmotionalColoring children={<EmotionalScoring />} />
-        <div className="flex shadow heading bg-blue-gray rounded py-4 px-8">
+        <div className="flex shadow heading bg-indigo-300 rounded py-4 px-8">
           Share your Mood
         </div>
       </div>
-      <div className="flex flex-col bg-gray-300 py-10 justify-center items-center space-y-6 w-full">
+      <div className="flex flex-col bg-gray-200 py-10 justify-center items-center space-y-6 w-full">
         <h2 className="heading">Feelings today as a collective 🫂</h2>
         <div className="w-1/2">
           <EmotionalColoringCollective

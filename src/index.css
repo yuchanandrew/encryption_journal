@@ -52,7 +52,7 @@ body {
     @apply border-2 rounded focus:outline focus:shadow-xl focus:-translate-y-1 focus:scale-101 w-full h-20 text-lg text-left pl-3 pr-3 bg-white overflow-hidden;
   }
   .input-field {
-    @apply border-2 rounded py-2 mt-1 focus:outline focus:shadow-xl w-full px-3;
+    @apply border-2 rounded-xl py-3 mt-2 focus:outline focus:shadow-xl w-full px-3;
   }
   .emotion-analysis-heading {
     @apply text-xl font-medium;
@@ -103,20 +103,21 @@ body {
 /* TODO: MAKE THIS BIG AND SMOOTHER (also add color-responsive background components) */
 @layer components {
   .toggle-btn-display {
-    @apply relative w-[20vw] h-[10vw] bg-gray-200 rounded-full border-gray-400 border-1 shadow-md cursor-pointer transition-all duration-400 ease-in-out hover:border-gray-700;
+    @apply relative w-[20vw] h-[10vw] bg-gray-200 rounded-full border-gray-400 border-2 shadow-md cursor-pointer transition-all duration-400 ease-in-out hover:border-gray-700;
   }
 
   .big-thumb {
-    @apply absolute w-[8vw] h-[8vw] bg-gray-300 rounded-full border-gray-500 border-1 shadow-md -translate-y-[4vw] transition-transform;
+    @apply absolute w-[8vw] h-[8vw] bg-gray-300 rounded-full border-gray-500 border-2 shadow-md -translate-y-[4vw] transition-all transform duration-400 hover:border-gray-700;
     transform: translateX(1vw);
   }
 
   .toggle-btn-display.toggled {
-    background: linear-gradient(45deg, var(--color-green-200), var(--color-green-400), var(--color-green-600));
+    /* background: linear-gradient(45deg, var(--color-green-200), var(--color-green-400), var(--color-green-600)); */
+    @apply bg-green-300 transition-all ease-in-out duration-400;
   }
   
   .toggle-btn-display.toggled .big-thumb {
-    @apply shadow-md border-1 border-gray-500;
+    @apply shadow-md border-2 border-gray-500 transition-all ease-in-out duration-400 transform hover:border-gray-700;
     transform: translateX(10.75vw);
   }
 
@@ -124,6 +125,33 @@ body {
     @apply text-jade transition-all transform hover:text-green-800 hover:scale-105 hover:-translate-y-1;
   }
 }
+
+/* Blinking Cursor Typewriter */
+@layer utilities {
+  .typewriter {
+    height: 200px;
+    border-right: 8px solid black;
+    overflow: hidden;
+    opacity: 1;
+    animation: typing 5s steps(26), blinking-cursor 0.75s step-end infinite;
+  }
+
+  @keyframes typing {
+    from { width: 0; }
+    to { width: 26ch; }
+  }
+
+  @keyframes blinking-cursor {
+    0%, 100% {
+      border-color: transparent;
+    }
+    50% {
+      border-color: black;
+    }
+  }
+}
+
+/* Hero */
 
 @layer components {
   .name-underline {
@@ -150,8 +178,42 @@ body {
   .animate-infinite-scroll {
     animation: infinite-scroll 30s linear infinite;
   }
+
+  .animate-infinite-scroll:hover {
+    animation-play-state: paused;
+  }
+
+  @keyframes right-bounce {
+    0%, 100% {
+      transform: translateX(-25%);
+      animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+      transform: translateX(0);
+      animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+  }
+
+  .animate-right-bounce {
+    animation: right-bounce 1s infinite;
+  }
 }
 
+/* Popping card animation */
+@layer utilities {
+  @keyframes popping {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(0.7);
+    }
+  }
+
+  .animate-popping {
+    animation: popping 0.25s ease-in-out;
+  }
+}
 
 .sign-up-button {
   @apply px-5 py-3 rounded-xl w-full border-2 border-sky-700 cursor-pointer z-0;
@@ -196,14 +258,17 @@ body {
   }
 }
 
+
+/* Footer */
 .photo-wrapper {
-  @apply relative w-full max-w-[50vw] max-h-[50vw] md:max-w-[15vw] md:max-h-[15vw] aspect-square flex items-center justify-center;
+  @apply relative z-1 w-full max-w-[50vw] max-h-[50vw] md:max-w-[15vw] md:max-h-[15vw] aspect-square flex items-center justify-center;
 }
 
 .photo-wrapper::before {
   content: "";
   position: absolute;
   border-radius: 9999px;
+  cursor: pointer;
   background: linear-gradient(to right, var(--color-green-500), var(--color-blue-500), var(--color-purple-500), var(--color-blue-500), var(--color-green-500));
   background-size: 600% 600%;
   background-repeat: repeat;
@@ -211,27 +276,44 @@ body {
   height: calc(100% + 10px);
   filter: blur(8px);
   animation: glowing-profile 5s linear infinite;
-  transition: opacity .3s ease-in-out;
+  transform: scale(1);
+  transition: opacity .3s ease-in-out, transform .3s ease-in-out;
   opacity: 1;
+}
+
+.photo-wrapper:hover::before {
+  width: calc(100% + 15px);
+  height: calc(100% + 15px);
+  filter: blur(10px);
+  animation-duration: 2s;
+  transform: scale(1.08);
+  transition: opacity .3s ease-in-out, transform .3s ease-in-out;
 }
 
 @keyframes glowing-profile {
   0% {
     background-position: 0 0;
     opacity: 0.3;
-    filter: brightness(1.2), blur(4px);
+    filter: brightness(1.2) blur(4px);
   }
   50% {
     opacity: 1;
-    filter: brightness(2), blur(8px);
+    filter: brightness(2) blur(8px);
   }
   100% {
     background-position: 100% 0;
     opacity: 0.3;
-    filter: brightness(1.2), blur(4px);
+    filter: brightness(1.2) blur(4px);
   }
 }
 
 .about-photo {
-  @apply flex w-full h-full object-cover rounded-full relative z-10;
+  @apply flex w-full h-full object-cover rounded-full relative z-10 cursor-pointer;
+  transform: scale(1);
+  transition: opacity .3s ease-in-out, transform .3s ease-in-out;
+}
+
+.about-photo:hover {
+  transform: scale(1.05);
+  transition: opacity .3s ease-in-out, transform .3s ease-in-out;
 }

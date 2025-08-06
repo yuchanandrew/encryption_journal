@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { FaGoogle } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -93,15 +93,21 @@ const Register = () => {
             />
           </div>
           <div className="flex justify-center">
-            <button className="flex hover-primary mt-8 font-semibold bg-matcha w-1/2 rounded py-4 justify-center items-center">
+            <button className="flex hover-primary mt-8 font-semibold shadow-xl bg-green-300 border-2 border-green-400 w-1/2 rounded-xl py-4 justify-center items-center">
               Register
             </button>
           </div>
-          <div className="flex justify-center py-3 mt-4">
-            <p>- Or register through -</p>
+          <div className="flex border-2 border-gray-300 rounded-xl mt-12"></div>
+          <div className="flex mt-4">
+            <p>Already have an account with us?</p>
           </div>
-          <div className="flex justify-center mt-4 mb-4">
-            <FaGoogle size={25} />
+          <div className="flex mb-4 mt-2">
+            <Link
+              to="/sign-in"
+              className="text-sky-400 underline hover:text-sky-500"
+            >
+              Sign In
+            </Link>
           </div>
         </form>
       </div>

@@ -17,14 +17,21 @@ const PostPage = () => {
   const { id } = useParams();
 
   const [post, setPost] = useState<PostType | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchPost = async () => {
     try {
       const response = await axios.get(`http://localhost:3000/get-posts/${id}`);
 
+      // if (response.status === 200) {
       console.log("post:", response.data.post);
 
       setPost(response.data.post);
+      // } else if (response.status === 404) {
+      //   console.log("Error has occurred");
+
+      //   setError(response.data.message);
+      // }
     } catch (error) {
       console.error("An error occurred while retrieving post:", error);
     }
@@ -41,8 +48,9 @@ const PostPage = () => {
   };
 
   return (
-    <div className="outer-page-div">
+    <div className="outer-page-div mb-12">
       <h2 className="page-heading flex">Post #{id}</h2>
+      {/* {!error ? ( */}
       {post ? (
         <div className="flex w-1/2 min-w-1/2 justify-center">
           <Post
@@ -53,6 +61,7 @@ const PostPage = () => {
             image_url={post.image_url}
             date={post.post_date}
             time={post.post_time}
+            clamp_mode={false}
             onDelete={handleDelete}
           />
         </div>
@@ -61,6 +70,9 @@ const PostPage = () => {
           Could not find post with post ID {id} 🕵️
         </p>
       )}
+      {/* ) : (
+        <h2 className="page-heading flex">{error}</h2>
+      )} */}
     </div>
   );
 };
