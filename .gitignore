@@ -26,6 +26,6 @@ dist-ssr
 # Environment files
 .env
 
-# Training Data
-emotions_model/
-results/
+# # Training Data
+# emotions_model/
+# results/
