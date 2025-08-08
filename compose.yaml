@@ -1,21 +1,25 @@
 services:
   backend:
     build: ./server
-    container_name: backend-1
     ports:
       - '3000:3000'
     depends_on:
       - db
 
   frontend:
-    build: ./src
-    container_name: frontend-1
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     ports:
       - '5173:5173'
+    # develop:
+    #   watch:
+    #     - action: sync
+    #       path: .
+    #       target: /app
 
   db:
     image: mysql:latest
-    container_name: db-1
     environment:
       MYSQL_ROOT_PASSWORD: Linguistic_Pro03
       MYSQL_DATABASE: encrypt
