@@ -1,0 +1,29 @@
+services:
+  backend:
+    build: ./server
+    container_name: backend-1
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+
+  frontend:
+    build: ./src
+    container_name: frontend-1
+    ports:
+      - '5173:5173'
+
+  db:
+    image: mysql:latest
+    container_name: db-1
+    environment:
+      MYSQL_ROOT_PASSWORD: Linguistic_Pro03
+      MYSQL_DATABASE: encrypt
+      MYSQL_HOST: db
+    # What
+    volumes:
+    - mysql_data:/var/lib/mysql
+    - ./server/encryption.sql:/docker-entrypoint-initdb.d/encryption.sql
+
+volumes:
+  mysql_data:

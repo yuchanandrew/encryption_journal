@@ -15,11 +15,14 @@ app.use(cors({
     credentials: true
 }));
 
+
+// WTFFFF!!!!
 const pool = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: 'encrypt'
+    host: 'db',
+    user: 'root',
+    password: 'Linguistic_Pro03',
+    database: 'encrypt',
+    port: 3306
 }).promise();
 
 {/* (TEST) SECTION 1: USER REGISTRATION & AUTHENTICATION */}

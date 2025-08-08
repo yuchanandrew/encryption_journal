@@ -1,4 +1,4 @@
-CREATE DATABASE encrypt;
+CREATE DATABASE IF NOT EXISTS encrypt;
 USE encrypt;
 
 CREATE TABLE users (
@@ -32,8 +32,3 @@ CREATE TABLE post_test (
     title TEXT NOT NULL,
     emotion VARCHAR(50) DEFAULT NULL
 );
-
--- Adding some values into TABLE posts for testing purposes:
-
-INSERT INTO posts (user_id, title, content, privacy_mode)
-VALUES (1, "Test post", "Hello this is a private post by yuchanandrew.", true);
