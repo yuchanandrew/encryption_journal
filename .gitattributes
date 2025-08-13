@@ -1,3 +1,4 @@
 emotions_model/** filter=lfs diff=lfs merge=lfs -text
 results/** filter=lfs diff=lfs merge=lfs -text
 model.safetensors filter=lfs diff=lfs merge=lfs -text
+server/model/results/checkpoint-313/optimizer.pt filter=lfs diff=lfs merge=lfs -text

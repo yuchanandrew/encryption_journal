@@ -18,10 +18,10 @@ app.use(cors({
 
 // WTFFFF!!!!
 const pool = mysql.createPool({
-    host: 'db',
-    user: 'root',
-    password: 'Linguistic_Pro03',
-    database: 'encrypt',
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME,
     port: 3306
 }).promise();
 
@@ -263,7 +263,7 @@ app.delete("/remove-post/:id", async(req, res) => {
 app.post("/api/emotion", async(req, res) => {
     const {text} = req.body;
     try {
-        const response = await fetch("http://localhost:5000/predict", {
+        const response = await fetch("http://model:5000/predict", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({ text })
