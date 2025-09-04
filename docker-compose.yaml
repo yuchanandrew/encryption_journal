@@ -1,10 +1,10 @@
 networks:
   traefik_public:
     external: false
-  db_internal:
-    internal: true
-  backend_internal:
-    internal: true
+  # db_internal:
+  #   internal: true
+  # backend_internal:
+  #   internal: true
 
 services:
   traefik:
@@ -22,26 +22,26 @@ services:
       - "./letsencrypt:/letsencrypt"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "./traefik.yml:/traefik.yml:ro"
-    restart: unless-stopped
+    # restart: unless-stopped
     networks:
       - traefik_public
 
-  backend:
-    build: ./server/node_server
-    depends_on:
-      - db
-    env_file:
-      - ./server/.env
-    networks:
-      - backend_internal
-      - db_internal
+  # backend:
+  #   build: ./server/node_server
+  #   depends_on:
+  #     - db
+  #   env_file:
+  #     - ./server/.env
+  #   networks:
+  #     - backend_internal
+  #     - db_internal
 
-  model:
-    build: ./server/model
-    networks:
-      - traefik_public
-      - db_internal
-      - backend_internal
+  # model:
+  #   build: ./server/model
+  #   networks:
+  #     - traefik_public
+  #     - db_internal
+  #     - backend_internal
 
   frontend:
     build:
@@ -55,18 +55,18 @@ services:
       - "traefik.http.services.frontend.loadbalancer.server.port=5173"
     networks:
       - traefik_public
-      - backend_internal
+      # - backend_internal
 
-  db:
-    image: mysql:latest
-    env_file:
-      - ./server/.env
-    volumes:
-    - mysql_data:/var/lib/mysql
-    - ./server/encryption.sql:/docker-entrypoint-initdb.d/encryption.sql
-    networks:
-      - db_internal
+  # db:
+  #   image: mysql:latest
+  #   env_file:
+  #     - ./server/.env
+  #   volumes:
+  #   - mysql_data:/var/lib/mysql
+  #   - ./server/encryption.sql:/docker-entrypoint-initdb.d/encryption.sql
+  #   networks:
+  #     - db_internal
 
 volumes:
-  mysql_data:
+  # mysql_data:
   letsencrypt:
