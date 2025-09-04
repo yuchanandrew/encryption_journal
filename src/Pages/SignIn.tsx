@@ -4,6 +4,8 @@ import { FaGoogle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../Components/Context/AuthProvider";
 
+const base_url = "api";
+
 const SignIn = () => {
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
@@ -22,7 +24,7 @@ const SignIn = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:3000/sign-in", {
+      const response = await axios.post(`${base_url}/sign-in`, {
         email: emailAddress,
         plain_pw: password,
       });

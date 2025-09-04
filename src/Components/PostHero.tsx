@@ -4,6 +4,8 @@ import EmotionDisplay from "./EmotionDisplay";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+const base_url = "api";
+
 interface PostProps {
   id: number;
   user_id: number;
@@ -23,9 +25,7 @@ const PostHero = ({ id, user_id, title, content, image_url }: PostProps) => {
 
   const fetchUser = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:3000/get-user/${user_id}`
-      );
+      const response = await axios.get(`${base_url}/get-user/${user_id}`);
 
       setUser(response.data.user[0]);
     } catch (error) {

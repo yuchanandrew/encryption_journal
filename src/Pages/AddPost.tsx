@@ -6,6 +6,8 @@ import AuthContext from "../Components/Context/AuthProvider";
 
 axios.defaults.withCredentials = true;
 
+const base_url = "api";
+
 const AddPost = () => {
   const navigateToPost = useNavigate();
 
@@ -29,38 +31,29 @@ const AddPost = () => {
     e.preventDefault();
 
     try {
-      const post_response = await axios.post(
-        "http://localhost:3000/create-post",
-        {
-          // Post title, content, and image to route
-          title,
-          user_id: user?.id,
-          content,
-          image_url: imageUrl,
-          public_mode: toggle,
-        }
-      );
+      const post_response = await axios.post(`${base_url}/create-post`, {
+        // Post title, content, and image to route
+        title,
+        user_id: user?.id,
+        content,
+        image_url: imageUrl,
+        public_mode: toggle,
+      });
 
       console.log("Post created:", post_response.data);
 
       const post = post_response.data.post;
 
-      const emotion_response = await axios.post(
-        "http://localhost:3000/api/emotion",
-        {
-          text: post.content,
-        }
-      );
+      const emotion_response = await axios.post(`${base_url}/emotion`, {
+        text: post.content,
+      });
 
       const resultEmotion = emotion_response.data.js_emotion.emotion;
 
-      const add_emotion_response = await axios.post(
-        "http://localhost:3000/add-emotion",
-        {
-          id: post.id,
-          emotion: resultEmotion,
-        }
-      );
+      const add_emotion_response = await axios.post(`${base_url}/add-emotion`, {
+        id: post.id,
+        emotion: resultEmotion,
+      });
 
       console.log("message:", add_emotion_response.data.message);
 

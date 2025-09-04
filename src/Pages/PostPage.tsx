@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Post from "../Components/Post";
 
+const base_url = "api";
+
 type PostType = {
   id: number;
   user_id: number;
@@ -21,7 +23,7 @@ const PostPage = () => {
 
   const fetchPost = async () => {
     try {
-      const response = await axios.get(`http://localhost:3000/get-posts/${id}`);
+      const response = await axios.get(`${base_url}/get-posts/${id}`);
 
       // if (response.status === 200) {
       console.log("post:", response.data.post);

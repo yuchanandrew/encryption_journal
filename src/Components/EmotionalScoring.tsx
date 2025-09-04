@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import AuthContext from "./Context/AuthProvider";
 
+const base_url = "api";
+
 const EmotionalScoring = () => {
   const auth = useContext(AuthContext);
 
@@ -71,15 +73,12 @@ const EmotionalScoring = () => {
         "and with timestamp:",
         nowToTimestamp
       );
-      const response = await axios.get(
-        "http://localhost:3000/emotions-of-the-day",
-        {
-          params: {
-            day: nowToTimestamp,
-            user_id: user?.id,
-          },
-        }
-      );
+      const response = await axios.get(`${base_url}/emotions-of-the-day`, {
+        params: {
+          day: nowToTimestamp,
+          user_id: user?.id,
+        },
+      });
 
       // console.log("User_id:", response.data.user_id);
 

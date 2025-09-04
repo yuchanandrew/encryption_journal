@@ -5,6 +5,8 @@ import axios from "axios";
 import PostHero from "../Components/PostHero";
 import { LuCircleArrowRight } from "react-icons/lu";
 
+const base_url = "api";
+
 type PostType = {
   id: number;
   user_id: number;
@@ -30,7 +32,7 @@ const HeroPage = () => {
 
   const fetchCards = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/get-posts");
+      const response = await axios.get(`${base_url}/get-posts`);
 
       setCards(response.data.posts);
     } catch (error) {

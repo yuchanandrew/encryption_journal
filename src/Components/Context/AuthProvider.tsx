@@ -2,6 +2,8 @@ import axios from "axios";
 import { createContext, useState } from "react";
 import type { ReactNode } from "react";
 
+const base_url = "api";
+
 // Define the shape of the user
 
 // IMPORTANT TODO: Figure out if putting hashed_pw or refresh_token in user's shape would compromise users during production!!
@@ -39,7 +41,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const verifyUser = async (token: string) => {
     try {
-      const response = await axios.get("http://localhost:3000/auth", {
+      const response = await axios.get(`${base_url}/auth`, {
         headers: {
           authorization: `Bearer ${token}`,
         },

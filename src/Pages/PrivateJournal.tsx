@@ -3,6 +3,8 @@ import AuthContext from "../Components/Context/AuthProvider";
 import axios from "axios";
 import Post from "../Components/Post";
 
+const base_url = "api";
+
 // Borrowed assets from Collection.tsx to replicate journal feature
 type PostType = {
   id: number;
@@ -56,7 +58,7 @@ const PrivateJournal = () => {
         try {
           // Make sure that accessToken is passed through for authentication
           const response = await axios.get(
-            `http://localhost:3000/get-posts/users/${user.id}`,
+            `${base_url}/get-posts/users/${user.id}`,
             {
               headers: {
                 authorization: `Bearer ${accessToken}`,

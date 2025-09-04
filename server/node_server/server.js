@@ -15,8 +15,6 @@ app.use(cors({
     credentials: true
 }));
 
-
-// WTFFFF!!!!
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -29,7 +27,7 @@ const pool = mysql.createPool({
 
 app.use(express.json());
 
-app.post("/register", async(req, res) => {
+app.post("/api/register", async(req, res) => {
     // Get the username and plain_pw from body
     const {username, email, plain_pw} = req.body;
     const rounds = 10; // Determine the number of salt rounds necessary
@@ -55,7 +53,7 @@ app.post("/register", async(req, res) => {
     }
 });
 
-app.post("/sign-in", async(req, res) => {
+app.post("/api/sign-in", async(req, res) => {
     try {
         // Retrieve username and plain_pw from body
         const {email, plain_pw} = req.body;
@@ -123,7 +121,7 @@ app.post("/sign-in", async(req, res) => {
 });
 
 // TODO: Add verifyJWT and match requested user id to authenticated user id
-app.put("/update-profile", async(req, res) => {
+app.put("/api/update-profile", async(req, res) => {
     const {id, bio, profile_img_url} = req.body;
 
     try {
@@ -136,14 +134,14 @@ app.put("/update-profile", async(req, res) => {
     }
 });
 
-app.get("/auth", verifyJWT, async(req, res) => {
+app.get("/api/auth", verifyJWT, async(req, res) => {
     res.status(200).json({
         message: "Successfully decoded.",
         user: req.user
     });
 });
 
-app.post("/sign-out", async(req, res) => {
+app.post("/api/sign-out", async(req, res) => {
     res.clearCookie('jwt', {httpOnly: true, sameSite: "None", secure: true});
 
     res.status(204).send();
@@ -151,7 +149,7 @@ app.post("/sign-out", async(req, res) => {
 
 {/* (TEST) SECTION 2: RETRIEVE POSTS & CRUD MODAL FOR POSTS */}
 
-app.get("/get-posts", async(req, res) => {
+app.get("/api/get-posts", async(req, res) => {
     const search_query = `SELECT *, DATE_FORMAT(time_created, '%Y-%m-%d') as post_date, DATE_FORMAT(time_created, '%H:%i:%s') as post_time FROM posts WHERE public_mode = 1`;
     const [result] = await pool.query(search_query);
 
@@ -168,7 +166,7 @@ app.get("/get-posts", async(req, res) => {
 // should only be accessed by the authorized user
 
 // PARAMS (FROM TABLE posts): id, user_id
-app.get("/get-posts/:id", async(req, res) => {
+app.get("/api/get-posts/:id", async(req, res) => {
     const {id} = req.params;
 
     try {
@@ -190,7 +188,7 @@ app.get("/get-posts/:id", async(req, res) => {
 });
 
 // Retrieve posts with specific user id (private)
-app.get("/get-posts/users/:user_id", verifyJWT, async(req, res) => {
+app.get("/api/get-posts/users/:user_id", verifyJWT, async(req, res) => {
     const {user_id} = req.params;
 
     try {
@@ -208,7 +206,7 @@ app.get("/get-posts/users/:user_id", verifyJWT, async(req, res) => {
 });
 
 // Retrieve all of user's posts (public)
-app.get("/get-public-posts/:user_id", async(req, res) => {
+app.get("/api/get-public-posts/:user_id", async(req, res) => {
     const {user_id} = req.params;
 
     try {
@@ -222,7 +220,7 @@ app.get("/get-public-posts/:user_id", async(req, res) => {
 });
 
 // Update 7/24: Added in public_mode toggle functionality into AddPost.tsx component
-app.post("/create-post", async(req, res) => {
+app.post("/api/create-post", async(req, res) => {
     const {title, user_id, content, image_url, public_mode} = req.body;
 
     try {
@@ -243,7 +241,7 @@ app.post("/create-post", async(req, res) => {
     }
 });
 
-app.delete("/remove-post/:id", async(req, res) => {
+app.delete("/api/remove-post/:id", async(req, res) => {
     const {id} = req.params;
 
     try {
@@ -263,6 +261,7 @@ app.delete("/remove-post/:id", async(req, res) => {
 app.post("/api/emotion", async(req, res) => {
     const {text} = req.body;
     try {
+        // DEMO & PROD: "http://model:5000/predict"
         const response = await fetch("http://model:5000/predict", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
@@ -282,7 +281,7 @@ app.post("/api/emotion", async(req, res) => {
 
 // TODO: Implement a model where the emotions are based on the collective group
 // TODO: Create another route that analyzes emotions of individual users based on both their private AND public posts
-app.get("/emotions-of-the-day", async(req, res) => {
+app.get("/api/emotions-of-the-day", async(req, res) => {
     const { day, user_id } = req.query;
 
     try{
@@ -295,7 +294,7 @@ app.get("/emotions-of-the-day", async(req, res) => {
     }
 });
 
-app.get("/emotions-of-the-day-collective", async(req, res) => {
+app.get("/api/emotions-of-the-day-collective", async(req, res) => {
     const { day } = req.query;
 
     try{
@@ -309,7 +308,7 @@ app.get("/emotions-of-the-day-collective", async(req, res) => {
 });
 
 // Route to get all 3 of the most relevant emotions of the day
-app.get("/top-emotions-of-the-day", async(req, res) => {
+app.get("/api/top-emotions-of-the-day", async(req, res) => {
     const { day, user_id } = req.query;
 
     try {
@@ -328,7 +327,7 @@ app.get("/top-emotions-of-the-day", async(req, res) => {
 });
 
 // Getting the top emotions of the day as a collective
-app.get("/top-emotions-of-the-day-collective", async(req, res) => {
+app.get("/api/top-emotions-of-the-day-collective", async(req, res) => {
     const { day } = req.query;
 
     try {
@@ -349,7 +348,7 @@ app.get("/top-emotions-of-the-day-collective", async(req, res) => {
 // TODO: Retrieve each post's emotion from database compared to having Python re-compute sentiment analysis
 
 // UPDATE 7/24: Replaced all instances of post_test with posts
-app.get("/get-emotion/:id", async(req, res) => {
+app.get("/api/get-emotion/:id", async(req, res) => {
     const {id} = req.params;
     
     try {
@@ -365,7 +364,7 @@ app.get("/get-emotion/:id", async(req, res) => {
 })
 
 // Update emotions to the database
-app.post("/add-emotion", async(req, res) => {
+app.post("/api/add-emotion", async(req, res) => {
     const { id, emotion } = req.body;
 
     try {
@@ -394,7 +393,7 @@ app.get("/api/emotion/:emotion", async(req, res) => {
 
 {/* SECTION 4: USER RETRIEVAL AND ROUTES REGARDING USERS TABLE */}
 
-app.get("/get-user/:id", async(req, res) => {
+app.get("/api/get-user/:id", async(req, res) => {
     const {id} = req.params;
     
     try {

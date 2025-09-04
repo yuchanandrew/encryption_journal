@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 
+const base_url = "api";
+
 const Register = () => {
   const [username, setUsername] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
@@ -21,7 +23,7 @@ const Register = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:3000/register", {
+      const response = await axios.post(`${base_url}/register`, {
         username: username,
         email: emailAddress,
         plain_pw: password,

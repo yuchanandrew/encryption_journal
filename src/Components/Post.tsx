@@ -6,6 +6,8 @@ import EmotionDisplay from "./EmotionDisplay";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+const base_url = "api";
+
 interface PostProps {
   id: number;
   user_id: number;
@@ -38,9 +40,7 @@ const Post = ({
   const [user, setUser] = useState<UserType | null>(null);
 
   const handleDelete = async () => {
-    const response = await axios.delete(
-      `http://localhost:3000/remove-post/${id}`
-    );
+    const response = await axios.delete(`${base_url}/remove-post/${id}`);
     console.log(response.data.message);
 
     onDelete(id);
@@ -48,9 +48,7 @@ const Post = ({
 
   const fetchUser = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:3000/get-user/${user_id}`
-      );
+      const response = await axios.get(`${base_url}/get-user/${user_id}`);
 
       setUser(response.data.user[0]);
     } catch (error) {

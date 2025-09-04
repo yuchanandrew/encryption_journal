@@ -15,6 +15,8 @@ User page should have the following functionalities:
 */
 }
 
+const base_url = "api";
+
 type UserType = {
   id: number;
   username: string;
@@ -40,9 +42,7 @@ const UserPage = () => {
 
   const fetchUser = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:3000/get-user/${user_id}`
-      );
+      const response = await axios.get(`${base_url}/get-user/${user_id}`);
 
       setUser(response.data.user[0]);
     } catch (error) {
@@ -53,7 +53,7 @@ const UserPage = () => {
   const fetchPosts = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/get-public-posts/${user_id}`
+        `${base_url}/get-public-posts/${user_id}`
       );
 
       console.log("Posts:", response.data.posts);

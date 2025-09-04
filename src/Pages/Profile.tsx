@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 
 // TODO: Ensure that if user is not logged in, the profile page is not accessible (404 error)
 
+const base_url = "api";
+
 const Profile = () => {
   const auth = useContext(AuthContext);
   const [image, setImage] = useState<string | null>(null);
@@ -41,7 +43,7 @@ const Profile = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.put("http://localhost:3000/update-profile", {
+      const response = await axios.put(`${base_url}/update-profile/`, {
         id: user?.id,
         bio: editBio,
         profile_img_url: editImage,
