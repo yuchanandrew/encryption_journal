@@ -30,8 +30,8 @@ certificatesResolvers:
     acme:
       email: yuchanandrew@gmail.com
       storage: /letsencrypt/acme.json
-      caServer: https://acme-v02.api.letsencrypt.org/directory #prod
-      # caServer: https://acme-staging-v02.api.letsencrypt.org/directory #staging
+      # caServer: https://acme-v02.api.letsencrypt.org/directory #prod
+      caServer: https://acme-staging-v02.api.letsencrypt.org/directory #staging
       dnsChallenge:
         provider: cloudflare
         resolvers:
