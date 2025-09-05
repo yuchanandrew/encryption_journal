@@ -11,6 +11,6 @@ export default defineConfig({
     strictPort: true
   },
   preview: {
-    allowedHosts: ['emjournal.dev']
+    allowedHosts: ['emjournal.dev', 'www.emjournal.dev']
   }
 })
