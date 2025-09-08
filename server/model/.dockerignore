@@ -1,3 +1,10 @@
 # /saved/
 # /results/
 # /emotions_model/
+
+.vite/
+.vitepress/
+.eslintcache
+
+*.env*
+*.log*

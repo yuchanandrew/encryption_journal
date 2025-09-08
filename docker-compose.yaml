@@ -44,6 +44,7 @@ services:
   #     - backend_internal
 
   frontend:
+    image: nginx
     build:
       context: .
       dockerfile: Dockerfile.dev
@@ -52,7 +53,7 @@ services:
       - "traefik.http.routers.frontend.rule=Host(`emjournal.dev`) || Host(`www.emjournal.dev`)"
       - "traefik.http.routers.frontend.entrypoints=websecure"
       - "traefik.http.routers.frontend.tls.certresolver=letsencrypt"
-      - "traefik.http.services.frontend.loadbalancer.server.port=5173"
+      - "traefik.http.services.frontend.loadbalancer.server.port=80"
     networks:
       - traefik_public
       # - backend_internal

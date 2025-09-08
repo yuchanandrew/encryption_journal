@@ -30,6 +30,7 @@ const Profile = () => {
   useEffect(() => {
     setImage(user?.profile_img_url ?? null);
     setBio(user?.bio ?? null);
+    console.log("Bio:", bio);
   }, [edit]);
 
   console.log("User:", user);

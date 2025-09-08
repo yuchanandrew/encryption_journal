@@ -1,7 +1,16 @@
-node_modules
+node_modules/
+dist/
+out/
 .gitignore
 .gitattributes
 Dockerfile.dev
 compose.yaml
 /server/
 /results/
+
+.vite/
+.vitepress/
+.eslintcache
+
+*.env*
+*.log*

@@ -14,9 +14,6 @@ import SignOutPage from "./Pages/SignOutPage";
 import Profile from "./Pages/Profile";
 import PrivateJournal from "./Pages/PrivateJournal";
 import UserPage from "./Pages/UserPage";
-import HeroPage from "./Pages/HeroPage";
-import { useContext } from "react";
-import AuthContext from "./Components/Context/AuthProvider";
 
 axios.defaults.withCredentials = true;
 

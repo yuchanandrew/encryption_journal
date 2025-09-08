@@ -19,7 +19,6 @@ const PostPage = () => {
   const { id } = useParams();
 
   const [post, setPost] = useState<PostType | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
   const fetchPost = async () => {
     try {

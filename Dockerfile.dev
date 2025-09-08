@@ -1,13 +1,26 @@
-FROM node:20-alpine
+ARG NODE_VERSION=22.14.0-alpine
+ARG NGINX_VERSION=alpine3.21
+
+FROM node:${NODE_VERSION} AS builder
 
 WORKDIR /app
 
 COPY package.json package-lock.json ./
 
-RUN --mount=type=cache,target=/root/.npm npm install
+RUN --mount=type=cache,target=/root/.npm npm ci
 
 COPY . .
 
-EXPOSE 5173
+RUN npm run build
 
-CMD ["npm", "run", "vite build"]
+FROM nginxinc/nginx-unprivileged:${NGINX_VERSION} AS runner
+
+USER nginx
+
+COPY nginx.conf /etc/nginx/nginx.conf
+
+COPY --chown=nginx:nginx --from=builder /app/dist /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
