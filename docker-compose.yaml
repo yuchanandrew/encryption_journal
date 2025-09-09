@@ -44,7 +44,6 @@ services:
   #     - backend_internal
 
   frontend:
-    image: nginx
     build:
       context: .
       dockerfile: Dockerfile.dev
