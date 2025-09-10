@@ -50,7 +50,7 @@ services:
       dockerfile: Dockerfile.dev
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=Host(`emjournal.dev`) || Host(`www.emjournal.dev`)"
+      - "traefik.http.routers.frontend.rule=Host(`api.emjournal.dev`)"
       - "traefik.http.routers.frontend.entrypoints=websecure"
       - "traefik.http.routers.frontend.tls.certresolver=letsencrypt"
       - "traefik.http.services.frontend.loadbalancer.server.port=80"
