@@ -1,3 +1,5 @@
+# INFO: THIS IS THE PROPER CONFIGS FOR DEPLOYMENT!
+
 api:
   dashboard: true
   insecure: true
