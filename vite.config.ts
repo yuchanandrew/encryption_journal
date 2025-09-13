@@ -5,6 +5,8 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  
+  // If the below doesn't work, remove
   build: {
     sourcemap: false,        // Speeds up builds
     target: 'esnext',        // Optimize output for modern browsers
