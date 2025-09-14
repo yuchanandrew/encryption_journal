@@ -36,12 +36,12 @@ services:
       - backend_internal
       - db_internal
 
-  model:
-    build: ./server/model
-    networks:
-      - traefik_public
-      - db_internal
-      - backend_internal
+  # model:
+  #   build: ./server/model
+  #   networks:
+  #     - traefik_public
+  #     - db_internal
+  #     - backend_internal
 
   frontend:
     build:
