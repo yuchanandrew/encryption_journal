@@ -11,7 +11,7 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-    origin: 'https://api.emjournal.dev',
+    origin: 'https://www.emjournal.dev',
     credentials: true
 }));
 
