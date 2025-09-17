@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ToggleButtonDisplay from "./ToggleButtonDisplay";
-import axios from "axios";
 import PostHero from "../Components/PostHero";
 import { LuCircleArrowRight } from "react-icons/lu";
 
-const base_url = "api";
+import api from "../api/api";
 
 type PostType = {
   id: number;
@@ -32,7 +31,7 @@ const HeroPage = () => {
 
   const fetchCards = async () => {
     try {
-      const response = await axios.get(`${base_url}/get-posts`);
+      const response = await api.get(`/get-posts`);
 
       setCards(response.data.posts);
     } catch (error) {

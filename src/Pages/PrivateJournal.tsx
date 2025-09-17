@@ -1,9 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../Components/Context/AuthProvider";
-import axios from "axios";
 import Post from "../Components/Post";
 
-const base_url = "api";
+import api from "../api/api";
 
 // Borrowed assets from Collection.tsx to replicate journal feature
 type PostType = {
@@ -57,14 +56,11 @@ const PrivateJournal = () => {
       const fetchJournal = async () => {
         try {
           // Make sure that accessToken is passed through for authentication
-          const response = await axios.get(
-            `${base_url}/get-posts/users/${user.id}`,
-            {
-              headers: {
-                authorization: `Bearer ${accessToken}`,
-              },
-            }
-          );
+          const response = await api.get(`/get-posts/users/${user.id}`, {
+            headers: {
+              authorization: `Bearer ${accessToken}`,
+            },
+          });
 
           const posts = response.data.posts;
 

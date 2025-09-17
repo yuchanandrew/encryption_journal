@@ -1,12 +1,9 @@
 import React, { useContext, useState } from "react";
 import AutoResizeText from "../Components/AutoResizeText";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../Components/Context/AuthProvider";
 
-axios.defaults.withCredentials = true;
-
-const base_url = "api";
+import api from "../api/api";
 
 const AddPost = () => {
   const navigateToPost = useNavigate();
@@ -31,7 +28,7 @@ const AddPost = () => {
     e.preventDefault();
 
     try {
-      const post_response = await axios.post(`${base_url}/create-post`, {
+      const post_response = await api.post(`/create-post`, {
         // Post title, content, and image to route
         title,
         user_id: user?.id,
@@ -44,13 +41,13 @@ const AddPost = () => {
 
       const post = post_response.data.post;
 
-      const emotion_response = await axios.post(`${base_url}/emotion`, {
+      const emotion_response = await api.post(`/emotion`, {
         text: post.content,
       });
 
       const resultEmotion = emotion_response.data.js_emotion.emotion;
 
-      const add_emotion_response = await axios.post(`${base_url}/add-emotion`, {
+      const add_emotion_response = await api.post(`/add-emotion`, {
         id: post.id,
         emotion: resultEmotion,
       });

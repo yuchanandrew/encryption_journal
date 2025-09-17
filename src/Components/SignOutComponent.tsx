@@ -1,9 +1,8 @@
 import { useContext } from "react";
 import AuthContext from "./Context/AuthProvider";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const base_url = "api";
+import api from "../api/api";
 
 const SignOutComponent = () => {
   const auth = useContext(AuthContext);
@@ -17,7 +16,7 @@ const SignOutComponent = () => {
   const { logout } = auth;
 
   const handleLogout = async () => {
-    await axios.post(`${base_url}/sign-out`);
+    await api.post(`/sign-out`);
 
     logout();
 

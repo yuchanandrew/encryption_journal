@@ -1,9 +1,8 @@
-import axios from "axios";
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../Components/Context/AuthProvider";
 
-const base_url = "api";
+import api from "../api/api";
 
 const SignIn = () => {
   const [emailAddress, setEmailAddress] = useState("");
@@ -23,7 +22,7 @@ const SignIn = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(`${base_url}/sign-in`, {
+      const response = await api.post(`/sign-in`, {
         email: emailAddress,
         plain_pw: password,
       });

@@ -1,7 +1,6 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 
-const base_url = "api";
+import api from "../api/api";
 
 const EmotionalColoringCollective = ({ children }: any) => {
   const [names, setNames] = useState<string[]>([]);
@@ -52,14 +51,11 @@ const EmotionalColoringCollective = ({ children }: any) => {
 
   const fetchTopEmotions = async () => {
     try {
-      const response = await axios.get(
-        `${base_url}/top-emotions-of-the-day-collective`,
-        {
-          params: {
-            day: nowToTimestamp,
-          },
-        }
-      );
+      const response = await api.get(`/top-emotions-of-the-day-collective`, {
+        params: {
+          day: nowToTimestamp,
+        },
+      });
 
       const emotions = response.data.emotions;
 

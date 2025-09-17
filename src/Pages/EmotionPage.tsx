@@ -1,9 +1,8 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Post from "../Components/Post";
 
-const base_url = "api";
+import api from "../api/api";
 
 type PostType = {
   id: number;
@@ -22,7 +21,7 @@ const EmotionPage = () => {
 
   const fetchTaggedPosts = async () => {
     try {
-      const response = await axios.get(`${base_url}/emotion/${emotion}`);
+      const response = await api.get(`/emotion/${emotion}`);
 
       const taggedPosts = response.data.posts;
 

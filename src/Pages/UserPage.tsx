@@ -1,8 +1,9 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { IoPersonCircle } from "react-icons/io5";
 import Post from "../Components/Post";
+
+import api from "../api/api";
 
 {
   /* VISION:
@@ -14,8 +15,6 @@ User page should have the following functionalities:
 
 */
 }
-
-const base_url = "api";
 
 type UserType = {
   id: number;
@@ -42,7 +41,7 @@ const UserPage = () => {
 
   const fetchUser = async () => {
     try {
-      const response = await axios.get(`${base_url}/get-user/${user_id}`);
+      const response = await api.get(`/get-user/${user_id}`);
 
       setUser(response.data.user[0]);
     } catch (error) {
@@ -52,9 +51,7 @@ const UserPage = () => {
 
   const fetchPosts = async () => {
     try {
-      const response = await axios.get(
-        `${base_url}/get-public-posts/${user_id}`
-      );
+      const response = await api.get(`/get-public-posts/${user_id}`);
 
       console.log("Posts:", response.data.posts);
 

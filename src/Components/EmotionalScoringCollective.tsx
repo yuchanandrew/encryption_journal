@@ -1,7 +1,6 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 
-const base_url = "api";
+import api from "../api/api";
 
 const EmotionalScoringCollective = () => {
   const emotionScore: Record<string, number> = {
@@ -54,14 +53,11 @@ const EmotionalScoringCollective = () => {
 
   const fetchDayEmotions = async () => {
     try {
-      const response = await axios.get(
-        `${base_url}/emotions-of-the-day-collective`,
-        {
-          params: {
-            day: nowToTimestamp,
-          },
-        }
-      );
+      const response = await api.get(`/emotions-of-the-day-collective`, {
+        params: {
+          day: nowToTimestamp,
+        },
+      });
 
       const retrievedEmotions = response.data.emotions;
 

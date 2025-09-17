@@ -1,9 +1,7 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
+import api from "../api/api";
 
 import { Link } from "react-router-dom";
-
-const base_url = "api";
 
 interface EmotionDisplayProps {
   id: number;
@@ -16,7 +14,7 @@ const EmotionDisplay = ({ id }: EmotionDisplayProps) => {
 
   const fetchEmotion = async () => {
     try {
-      const response = await axios.get(`${base_url}/get-emotion/${id}`);
+      const response = await api.get(`/get-emotion/${id}`);
 
       const retrievedEmotion = response.data.emotion;
 

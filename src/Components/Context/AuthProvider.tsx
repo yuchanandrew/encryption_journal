@@ -1,8 +1,7 @@
-import axios from "axios";
 import { createContext, useState } from "react";
 import type { ReactNode } from "react";
 
-const base_url = "api";
+import api from "../../api/api";
 
 // Define the shape of the user
 
@@ -41,7 +40,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const verifyUser = async (token: string) => {
     try {
-      const response = await axios.get(`${base_url}/auth`, {
+      const response = await api.get(`/auth`, {
         headers: {
           authorization: `Bearer ${token}`,
         },

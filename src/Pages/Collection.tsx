@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import Post from "../Components/Post";
-import axios from "axios";
 
-const base_url = "api";
+import api from "../api/api";
 
 type PostType = {
   id: number;
@@ -43,7 +42,7 @@ const Collection = () => {
   };
 
   const fetchPosts = async () => {
-    const response = await axios.get(`${base_url}/get-posts`);
+    const response = await api.get(`/get-posts`);
     const posts = await response.data.posts;
 
     console.log("list of posts:", posts);

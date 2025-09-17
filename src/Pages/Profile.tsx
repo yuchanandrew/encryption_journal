@@ -2,12 +2,11 @@ import React, { useContext, useEffect, useState } from "react";
 import AuthContext from "../Components/Context/AuthProvider";
 import { IoPersonCircle } from "react-icons/io5";
 import { FaEdit } from "react-icons/fa";
-import axios from "axios";
 import { Link } from "react-router-dom";
 
-// TODO: Ensure that if user is not logged in, the profile page is not accessible (404 error)
+import api from "../api/api";
 
-const base_url = "api";
+// TODO: Ensure that if user is not logged in, the profile page is not accessible (404 error)
 
 const Profile = () => {
   const auth = useContext(AuthContext);
@@ -44,7 +43,7 @@ const Profile = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.put(`${base_url}/update-profile/`, {
+      const response = await api.put(`/update-profile/`, {
         id: user?.id,
         bio: editBio,
         profile_img_url: editImage,
